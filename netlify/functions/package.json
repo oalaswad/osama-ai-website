@@ -1,5 +1,5 @@
 {
-  "name": "groq-function",
+  "name": "netlify-functions",
   "version": "1.0.0",
   "description": "Netlify functions for Osama's AI website",
   "main": "groq.js",
