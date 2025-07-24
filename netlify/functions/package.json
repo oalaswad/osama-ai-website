@@ -3,7 +3,5 @@
   "version": "1.0.0",
   "description": "Netlify functions for Osama's AI website",
   "main": "groq-handler.js",
-  "dependencies": {
-    "node-fetch": "^2.6.1"
-  }
+  "dependencies": {}
 }

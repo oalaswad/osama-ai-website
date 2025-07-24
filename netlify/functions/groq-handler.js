@@ -1,10 +1,9 @@
-// netlify-lambda handler
-const fetch = require("node-fetch");
+// netlify/functions/groq-handler.js
 
 exports.handler = async function (event) {
-  let message = "";
-
   console.log("Groq function started.");
+
+  let message = "";
 
   try {
     const body = JSON.parse(event.body);
@@ -27,10 +26,12 @@ exports.handler = async function (event) {
   }
 
   try {
+    // ✅ استخدام fetch المدمج (Node.js 18+ و Netlify تدعمه)
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        // ✅ تأكد أن متغير البيئة في Netlify يبدأ بـ Bearer
         "Authorization": process.env.GROQ_API_KEY
       },
       body: JSON.stringify({
@@ -54,10 +55,12 @@ exports.handler = async function (event) {
     console.log("Groq API raw data:", JSON.stringify(data, null, 2));
 
     if (data.error) {
-        console.error("Groq API error response:", data.error);
+      console.error("Groq API error response:", data.error);
     }
 
-    const reply = data?.choices?.[0]?.message?.content || "🤖 I couldn't generate a response right now. Try a different phrasing.";
+    const reply =
+      data?.choices?.[0]?.message?.content ||
+      "🤖 I couldn't generate a response right now. Try a different phrasing.";
 
     console.log("Generated reply:", reply);
 
@@ -67,10 +70,10 @@ exports.handler = async function (event) {
     };
 
   } catch (fetchError) {
-      console.error("Error calling Groq API:", fetchError);
-      return {
-          statusCode: 500,
-          body: JSON.stringify({ error: "An error occurred while connecting to the AI assistant." })
-      };
+    console.error("Error calling Groq API:", fetchError);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "An error occurred while connecting to the AI assistant." })
+    };
   }
 };
