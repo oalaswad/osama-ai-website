@@ -206,6 +206,8 @@
   display: flex;
   gap: 7px;
   flex-shrink: 0; /* منع منطقة الإدخال من الانكماش والتأكد من بقائها في الأسفل */
+  /* إضافة خصائص التعامل مع safe-area-inset */
+  padding-bottom: calc(13px + env(keyboard-inset-bottom, 0px)); /* تجربة لتعويض الكيبورد */
 }
 .chatbot-input-area input {
   flex: 1;
@@ -242,6 +244,8 @@
     max-height: 95vh;
     border-radius: 0;
     resize: none; /* تعطيل إعادة التحجيم اليدوي على الأجهزة الصغيرة لكي تملأ الشاشة */
+    /* إضافة تعويض لمناطق الشاشة الآمنة */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .chatbot-messages {
     min-height: unset;
