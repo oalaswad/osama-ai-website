@@ -26,16 +26,14 @@ exports.handler = async function (event) {
   }
 
   try {
-    // ✅ استخدام fetch المدمج (Node.js 18+ و Netlify تدعمه)
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // ✅ تأكد أن متغير البيئة في Netlify يبدأ بـ Bearer
-        "Authorization": process.env.GROQ_API_KEY
+        "Authorization": process.env.GROQ_API_KEY // يجب أن تبدأ بـ Bearer في Netlify
       },
       body: JSON.stringify({
-        model: "mixtral-8x7b-32768",
+        model: "llama3-70b-8192", // ✅ الموديل الجديد المدعوم
         messages: [
           {
             role: "system",
