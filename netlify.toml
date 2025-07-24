@@ -4,4 +4,4 @@ node_bundler = "esbuild"
 
 [build]
 publish = "."
-command = "npm install && npm npm run build:functions" # تم تعديل الأمر هنا
+command = "npm install && npm run build:functions" # تم تصحيح الخطأ المطبعي هنا
