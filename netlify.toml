@@ -4,4 +4,4 @@ node_bundler = "esbuild"
 
 [build]
 publish = "."
-command = "npm install --prefix netlify/functions"
+command = "npm install && npm run build:functions" // تم تعديل أمر البناء
