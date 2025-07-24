@@ -274,7 +274,7 @@ chatForm.onsubmit = async function(e) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
   try {
-    const groqReply = await fetch("/.netlify/functions/groq", {
+    const groqReply = await fetch("/.netlify/functions/groq-handler", {
       method: "POST",
       body: JSON.stringify({ message: txt })
     });
