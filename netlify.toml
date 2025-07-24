@@ -1,7 +1,7 @@
 [functions]
 directory = "netlify/functions"
-node_bundler = "esbuild" # هذا سيوجه Netlify لاستخدام esbuild لبناء وظائف Node.js
+node_bundler = "esbuild"
 
-[build] # هذا القسم يحدد إعدادات البناء العامة
-publish = "." # يخبر Netlify أن ملفات موقعك الثابتة (HTML, CSS, JS) موجودة في الجذر
-command = "npm install" # يخبر Netlify بتشغيل npm install لتثبيت التبعيات لوظائفك
+[build]
+publish = "."
+command = "npm install --prefix netlify/functions && npm run build-site" # تعديل هنا 
