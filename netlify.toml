@@ -4,6 +4,4 @@ node_bundler = "esbuild"
 
 [build]
 publish = "."
-# تأكد من أن كل أمر في سطر منفصل
-# هذا سيضمن تنفيذ npm install بشكل كامل قبل محاولة بناء الوظائف
-command = "npm install\nnpm run build:functions" # تم تعديل الأمر هنا
+command = "npm install\nnpm run build:functions"

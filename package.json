@@ -11,10 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^3.3.2",
-    "netlify-lambda": "^1.6.3"  // نقلناه إلى هنا وأضفنا فاصلة بعد node-fetch
+    "netlify-lambda": "^1.6.3"
   },
-  "description": "",
-  "devDependencies": {
-    // "netlify-lambda": "^1.6.3"  // أزل هذا السطر إذا كان موجوداً
-  }
+  "description": ""
 }
