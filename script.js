@@ -175,7 +175,7 @@ const instaSvg = instaCard ? instaCard.querySelector('svg') : null; // للحص�
 const instaTextGroup = instaCard ? instaCard.querySelector('.insta-text-group') : null; // للحصول على مجموعة النصوص
 
 
-const instaAccountName = '@0alaswad'; // اسم حساب الانستجرام الثابت
+const instaAccountName = '0alaswad'; // اسم حساب الانستجرام الثابت
 
 let currentLang = 'ar'; // اللغة الافتراضية
 
