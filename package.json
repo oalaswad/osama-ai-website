@@ -4,7 +4,7 @@
   "main": "chatbot-script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:functions": "netlify-lambda build netlify/functions"  // تم إضافة هذا السطر
+    "build:functions": "netlify-lambda build netlify/functions"
   },
   "keywords": [],
   "author": "",
@@ -12,8 +12,5 @@
   "dependencies": {
     "node-fetch": "^3.3.2"
   },
-  "description": "",
-  "devDependencies": { // تم إضافة هذا القسم
-    "netlify-lambda": "^1.6.3" //
-  }
+  "description": ""
 }
