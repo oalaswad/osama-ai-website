@@ -1,0 +1,283 @@
+/* بوت كرتوني */
+#osama-bot-widget {
+  position: fixed; bottom: 20px; right: 22px; z-index: 99997;
+  width: 115px; height: 256px;
+  pointer-events: none;
+  transition: filter .18s;
+}
+#osama-bot-inner {
+  position: absolute; width: 115px; height: 256px; left: 0; top: 0;
+  transition: right 1s, left 1s;
+  will-change: right, left;
+  pointer-events: none;
+}
+/* حركة البوت */
+.walk-to-center {
+  animation: walk-to-center 2.4s cubic-bezier(.38,1.5,.7,.9) forwards;
+}
+.walk-back-corner {
+  animation: walk-back-corner 1.7s cubic-bezier(.38,1.5,.7,.9) forwards;
+}
+@keyframes walk-to-center {
+  0%   { right: 0; }
+  80%  { right: 47vw; }
+  100% { right: 47vw; }
+}
+@keyframes walk-back-corner {
+  0%   { right: 47vw; }
+  100% { right: 0; }
+}
+/* فقاعة عصرية فوق الرأس */
+.bubble-above {
+  position: absolute;
+  left: 50%; top: -21px;
+  transform: translateX(-50%);
+  background: rgba(10,25,49,0.74);
+  color: #00d4ff;
+  padding: 11px 20px 10px 20px;
+  border-radius: 18px 22px 18px 11px;
+  font-size: 1.08em;
+  font-weight: bold;
+  box-shadow: 0 4px 28px #00d4ff22;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 170px;
+  text-align: center;
+  border: 1.6px solid #00d4ff55;
+  font-family: 'Tajawal','Cairo',sans-serif;
+  animation: fadeInBubble 1.4s 0.14s forwards;
+  z-index: 999;
+}
+@keyframes fadeInBubble {
+  0% { opacity: 0; transform: translateX(-50%) scale(.9);}
+  100% { opacity: 1; transform: translateX(-50%) scale(1);}
+}
+/* البوت يصبح قابلاً للنقر عند الجلوس */
+.sitting {
+  pointer-events: all !important;
+  cursor: pointer;
+  transition: box-shadow 0.18s;
+}
+.sitting:hover { filter: brightness(1.08); }
+/* واجهة التصغير */
+#miniChatBar {
+  position: fixed; bottom: 28px; right: 28px;
+  background: rgba(24,90,219,0.82);
+  color: #fff;
+  border-radius: 26px;
+  box-shadow: 0 4px 28px #185adb88;
+  display: none;
+  align-items: center; gap: 11px;
+  padding: 7px 20px 7px 14px;
+  font-size: 1.08em;
+  z-index: 99998;
+  cursor: pointer;
+  animation: miniBarPop .6s;
+  font-family: 'Tajawal','Cairo',sans-serif;
+}
+@keyframes miniBarPop {
+  from { transform: scale(.8) translateY(50px); opacity:0;}
+  to   { transform: scale(1) translateY(0); opacity:1;}
+}
+.mini-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #185adb);
+  display: inline-block;
+  box-shadow: 0 0 16px #3c9eff99;
+  position: relative;
+}
+.mini-avatar::after {
+  content: "🤖"; /* أو صورة SVG مصغرة */
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3em;
+  color: #fff;
+  filter: drop-shadow(0 0 4px #00d4ffcc);
+  z-index: 2;
+}
+.mini-msg { font-size: .99em;}
+/* الشات بوت */
+#chatbot-modal {
+  position: fixed; right: 0; left: 0; top: 0; bottom: 0;
+  display: none;
+  background: rgba(13,23,39,0.82);
+  z-index: 99999;
+  align-items: center; justify-content: center;
+  font-family: 'Tajawal','Cairo',sans-serif;
+  animation: chatModalShow .44s;
+}
+@keyframes chatModalShow {
+  from { opacity: 0;}
+  to   { opacity: 1;}
+}
+#chatbot-modal.active { display: flex;}
+.chatbot-box {
+  width: 450px; /* تم تكبير العرض */
+  max-width: 90vw; /* السماح بعرض أكبر على الشاشات الأصغر */
+  height: 600px; /* إضافة ارتفاع ثابت */
+  max-height: 90vh; /* تحديد أقصى ارتفاع بالنسبة للشاشة */
+  background: rgba(10,25,49,0.94);
+  border-radius: 28px;
+  box-shadow: 0 8px 44px #185adbbb;
+  overflow: auto; /* مهم جداً للسماح بظهور أشرطة التمرير عند إعادة التحجيم */
+  display: flex;
+  flex-direction: column; /* جعل المحتوى يرتب عموديًا */
+  animation: chatboxPop 0.8s;
+  position: relative;
+
+  /* خصائص لجعل النافذة قابلة لإعادة التحجيم */
+  resize: both; /* تسمح بإعادة التحجيم في الاتجاهين الأفقي والعمودي */
+  min-width: 320px; /* الحد الأدنى للعرض لمنعها من أن تصبح صغيرة جداً */
+  min-height: 400px; /* الحد الأدنى للارتفاع */
+}
+@keyframes chatboxPop {
+  from { transform: scale(.82) translateY(48px); opacity:.2;}
+  to   { transform: scale(1) translateY(0); opacity:1;}
+}
+.chatbot-header {
+  background: linear-gradient(90deg,#185adb 50%,#00d4ff 100%);
+  color: #fff;
+  padding: 18px 0 11px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.17em;
+  letter-spacing: .6px;
+  font-family: 'Orbitron','Cairo',sans-serif;
+  flex-shrink: 0; /* منع الرأس من الانكماش */
+}
+/* زر إغلاق وتصغير */
+.chatbot-close, .chatbot-minimize {
+  position: absolute; top: 14px; width: 37px; height: 37px;
+  border-radius: 50%; border: none;
+  font-size: 1.5em;
+  color: #00d4ff;
+  background: rgba(10,25,49,0.25);
+  box-shadow: 0 0 8px #3c9eff44;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  z-index: 22;
+  display: flex; align-items: center; justify-content: center;
+}
+.chatbot-close:hover, .chatbot-minimize:hover {
+  background: #185adb;
+  color: #fff;
+  box-shadow: 0 0 18px #3c9eff99;
+}
+.chatbot-close { left: 13px;}
+.chatbot-minimize { left: 62px;}
+.chatbot-messages {
+  background: rgba(24,90,219,0.08);
+  padding: 18px 10px 12px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1; /* هذا يجعل منطقة الرسائل تتمدد لملء المساحة المتاحة */
+  flex-basis: 0; /* يسمح لـ flex-grow بالعمل بشكل فعال */
+}
+.chatbot-bubble {
+  padding: 9px 17px;
+  border-radius: 20px 22px 20px 9px;
+  background: linear-gradient(120deg,#3c9eff22,#222831cc 78%);
+  align-self: flex-start;
+  font-size: 1em;
+  color: #fff;
+  max-width: 82%;
+  box-shadow: 0 1px 8px #185adb22;
+  animation: fadeInMsg 0.47s;
+  margin-bottom: 3px;
+}
+.chatbot-bubble.user {
+  background: linear-gradient(90deg,#185adbcc 50%,#3c9eff 100%);
+  align-self: flex-end;
+  color: #fff;
+  border-radius: 20px 9px 20px 22px;
+  text-align: right;
+}
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(9px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+.chatbot-input-area {
+  padding: 7px 10px 13px 10px;
+  background: transparent;
+  border-top: 1.5px solid #3c9eff22;
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0; /* منع منطقة الإدخال من الانكماش والتأكد من بقائها في الأسفل */
+}
+.chatbot-input-area input {
+  flex: 1;
+  padding: 9px 15px;
+  border-radius: 18px;
+  border: 1.5px solid #3c9eff55;
+  outline: none;
+  font-size: 1em;
+  background: #f6fbfbee;
+  color: #26314a;
+  font-family: inherit;
+  transition: border .18s;
+}
+.chatbot-input-area input:focus { border: 1.5px solid #00d4ff; }
+.chatbot-input-area button {
+  background: linear-gradient(135deg,#185adb,#00d4ff);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 0 19px;
+  font-size: 1em;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 2px 8px #185adb22;
+  font-weight: bold;
+  transition: background .18s;
+}
+.chatbot-input-area button:hover { background: #00d4ff; }
+@media (max-width: 600px) {
+  .chatbot-box {
+    width: 99vw;
+    max-width: 99vw;
+    height: 95vh; /* تكبير الارتفاع لملء الشاشة على الجوال */
+    max-height: 95vh;
+    border-radius: 0;
+    resize: none; /* تعطيل إعادة التحجيم اليدوي على الأجهزة الصغيرة لكي تملأ الشاشة */
+  }
+  .chatbot-messages {
+    min-height: unset;
+    max-height: unset; /* إزالة max-height الثابت للسماح لـ flex-grow بالعمل */
+  }
+}
+/* حركة تلويح اليد */
+.sitting-arm {
+  transform-origin: 92px 136px;
+  animation: wave-arm-sit 1.28s 0.2s 2 alternate;
+}
+@keyframes wave-arm-sit {
+  0% { transform: rotate(-60deg);}
+  18% { transform: rotate(-15deg);}
+  34% { transform: rotate(-65deg);}
+  54% { transform: rotate(-20deg);}
+  70% { transform: rotate(-63deg);}
+  100% { transform: rotate(-58deg);}
+}
+.walking-arm {
+  transform-origin: 82px 90px;
+  animation: wave-arm-walk 1.1s 1.0s 2 alternate;
+}
+@keyframes wave-arm-walk {
+  0%   { transform: rotate(-48deg);}
+  22%  { transform: rotate(-8deg);}
+  38%  { transform: rotate(-60deg);}
+  65%  { transform: rotate(-23deg);}
+  93%  { transform: rotate(-65deg);}
+  100% { transform: rotate(-45deg);}
+}
+#bot-glow, #bot-glow-sit {
+  animation: glow-pulse 1.14s 2 alternate;
+}
+@keyframes glow-pulse {
+  0%   { opacity: 0.15; rx: 32;}
+  30%  { opacity: 0.32; rx: 37;}
+  100% { opacity: 0.41; rx: 39;}
+}
