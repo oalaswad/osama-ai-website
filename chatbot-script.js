@@ -75,7 +75,7 @@ const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const chatbotCloseBtn = document.getElementById('chatbotCloseBtn');
 const chatbotMinBtn = document.getElementById('chatbotMinBtn');
-const unrecognizedQuestionsInput = document.getElementById('unrecognizedQuestions'); // العنصر الجديد
+const unrecognizedQuestionsInput = document.getElementById('unrecognizedQuestions');
 
 let isResizing = false;
 let botMoved = false;
@@ -102,7 +102,7 @@ function runBotSequence() {
 // عند الضغط على البوت الجالس
 osamaBotInner.addEventListener('click', function(e) {
   chatbotModal.classList.add('active');
-  firstWelcomeMsgs();
+  loadChatHistory(); // تحميل سجل المحادثة عند الفتح
   setTimeout(() => userInput.focus(), 450);
 });
 chatbotModal.addEventListener('click', function(e) {
@@ -120,7 +120,7 @@ chatbotMinBtn.onclick = function() {
 miniChatBar.onclick = function() {
   chatbotModal.classList.add('active');
   miniChatBar.style.display = 'none';
-  firstWelcomeMsgs();
+  loadChatHistory(); // تحميل سجل المحادثة عند الفتح من الشريط
 };
 document.addEventListener('keydown', function(e){
   if(e.key === "Escape") {
@@ -171,6 +171,8 @@ document.addEventListener('touchmove', function() {
 
 // متغير لتخزين الردود التي سيتم جلبها من ملف JSON
 let botResponses = {};
+// سجل المحادثة
+let chatHistory = [];
 
 // دالة لجلب الردود من ملف JSON
 async function fetchBotResponses() {
@@ -194,24 +196,29 @@ async function fetchBotResponses() {
 fetchBotResponses();
 
 
-// رسالة ترحيبية أولى
+// رسالة ترحيبية أولى (يتم عرضها فقط إذا لم يكن هناك سجل محادثة محفوظ)
 function firstWelcomeMsgs() {
-  chatMessages.innerHTML = '';
-  // تأكد من استخدام botResponses.greetings هنا
-  if (botResponses.greetings && botResponses.greetings.length > 0) {
-      addBotMsg(botResponses.greetings[Math.floor(Math.random() * botResponses.greetings.length)]);
-  } else {
-      addBotMsg("مرحباً بك! أنا هنا للمساعدة.");
-  }
+    if (chatHistory.length === 0) { // فقط إذا لم يكن هناك سجل محادثة
+        chatMessages.innerHTML = '';
+        if (botResponses.greetings && botResponses.greetings.length > 0) {
+            addBotMsg(botResponses.greetings[Math.floor(Math.random() * botResponses.greetings.length)]);
+        } else {
+            addBotMsg("مرحباً بك! أنا هنا للمساعدة.");
+        }
+    }
 }
 
 // إضافة رسالة من البوت
 function addBotMsg(msg, debugInfo = null) {
   const div = document.createElement('div');
   div.className = 'chatbot-bubble';
-  div.textContent = msg;
+  // معالجة الروابط وتضمين زر النسخ
+  div.innerHTML = formatMessage(msg); // استخدام دالة جديدة لتنسيق الرسالة
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+  chatHistory.push({ type: 'bot', text: msg });
+  saveChatHistory(); // حفظ سجل المحادثة
+  addCopyButton(div, msg); // إضافة زر النسخ للرسائل النصية
 
   if (debugEnabled && debugInfo && document.getElementById('debug-box')) {
     const box = document.getElementById('debug-box');
@@ -230,6 +237,69 @@ function addUserMsg(msg) {
   div.textContent = msg;
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+  chatHistory.push({ type: 'user', text: msg });
+  saveChatHistory(); // حفظ سجل المحادثة
+}
+
+// دالة لتنسيق الرسائل (جعل الروابط قابلة للنقر)
+function formatMessage(message) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return message.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#00d4ff; text-decoration:underline;">$1</a>');
+}
+
+// دالة لإضافة زر النسخ
+function addCopyButton(messageDiv, textToCopy) {
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = 'نسخ';
+    copyBtn.style.cssText = `
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-size: 0.7em;
+        cursor: pointer;
+        margin-top: 5px;
+        margin-right: 5px; /* مسافة للزر في الرسالة */
+        float: left; /* لجعل الزر يطفو على اليسار */
+        clear: both; /* لمنع تداخل الزر مع النص */
+    `;
+    copyBtn.onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            copyBtn.textContent = 'تم النسخ!';
+            setTimeout(() => { copyBtn.textContent = 'نسخ'; }, 2000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            copyBtn.textContent = 'فشل النسخ';
+        }
+    };
+    messageDiv.appendChild(copyBtn);
+}
+
+
+// دالة لحفظ سجل المحادثة في Local Storage
+function saveChatHistory() {
+    localStorage.setItem('chatbotHistory', JSON.stringify(chatHistory));
+}
+
+// دالة لتحميل سجل المحادثة من Local Storage
+function loadChatHistory() {
+    const savedHistory = localStorage.getItem('chatbotHistory');
+    if (savedHistory) {
+        chatHistory = JSON.parse(savedHistory);
+        chatMessages.innerHTML = ''; // مسح الرسائل الحالية
+        chatHistory.forEach(entry => {
+            if (entry.type === 'user') {
+                addUserMsg(entry.text);
+            } else {
+                addBotMsg(entry.text);
+            }
+        });
+    } else {
+        chatHistory = []; // تهيئة سجل فارغ إذا لم يكن هناك شيء محفوظ
+        firstWelcomeMsgs(); // عرض رسائل الترحيب الأولية
+    }
 }
 
 // الرد الذكي حسب الكلمات
@@ -330,7 +400,7 @@ async function findLocalBotResponse(lowerTxt) {
     return random(botResponses.personalQuestionsAboutUser);
   }
   // 5. التحية أو السلام أو الترحيب
-  else if (/(سلام|أهلاً|مرحبا|السلام عليكم|هاي|هلا|هلاو|hi|hello|hey|صباح الخير|مساء الخير|كيف الحال|شلونك|يا هلا|مساء النور|صباح النور|عساك طيب|شخبارك|أخبار؟|كيفك|تمام|مرحباً|أهلاً بك|يسعد صباحك|يسعد مساك|أهلاً وسهلاً|كيف حالك اليوم|كيفك اليوم|تمام التمام|شلون الأمور|شو الأخبار|كيف الدنيا|يا مرحبا|اهلين|مسا النور|صباح النور|شو أخبارك|شعلومك|شو مسوي|عساك بخير|الحمد لله|طيبين|كل عام وانتم بخير|عيدكم مبارك|عيد سعيد|جمعة مباركة|كيف أمضيت يومك|أهلاً وسهلاً بك|كيف أمورك|ما الجديد|هل من جديد|مساء الورد|صباح الفل|يا صباح الخير|يا مساء الخير)/i.test(lowerTxt)) {
+  else if (/(سلام|أهلاً|مرحبا|السلام عليكم|هاي|هلا|هلاو|hi|hello|hey|صباح الخير|مساء الخير|كيف الحال|شلونك|يا هلا|مساء النور|صباح النور|عساك طيب|شخبارك|أخبار؟|كيفك|تمام|مرحباً|أهلاً بك|يسعد صباحك|يسعد مساك|أهلاً وسهلاً|كيف حالك اليوم|كيفك اليوم|تمام التمام|شلون الأمور|شو الأخبار|كيف الدنيا|يا مرحبا|اهلين|مسا النور|صباح الفل|يا صباح الخير|يا مساء الخير)/i.test(lowerTxt)) {
     return random(botResponses.greetings);
   }
   // 6. عن الموقع (تم تعديل الكلمات المفتاحية لتجنب تكرار أسئلة أسامة)
