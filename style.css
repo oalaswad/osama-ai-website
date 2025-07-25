@@ -5,8 +5,8 @@ body {
   background:
     url('brain-bg-ai.png') center center/cover no-repeat,
     linear-gradient(135deg, #185ADB 0%, #0A1931 60%, #222831 100%);
-  background-size: cover; /* تأكيد تغطية الخلفية */
-  background-position: center center; /* تأكيد توسيط الخلفية */
+  background-size: cover;
+  background-position: center center;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -41,17 +41,21 @@ body {
   .hero-title { font-size: 0.9rem; }
   .hero-desc { font-size: 0.75rem; }
 }
-/* AI Logo and its glow */
+/* أيقونة AI ووميضها */
 .ai-logo {
   margin-bottom: 5px;
   position: relative;
   display: inline-block;
-  filter: drop-shadow(0 0 24px #3c9effbb) drop-shadow(0 0 12px #00d4ff66);
-  animation: aiLogoPulse 1.8s infinite alternate;
   cursor: pointer;
   z-index: 2;
   transition: filter 0.24s;
 }
+/* هذا الكلاس سيتم إضافتها وإزالتها بواسطة JavaScript للتحكم في الوميض */
+.ai-logo.pulsing {
+  filter: drop-shadow(0 0 24px #3c9effbb) drop-shadow(0 0 12px #00d4ff66);
+  animation: aiLogoPulse 1.8s infinite alternate;
+}
+
 @keyframes aiLogoPulse {
   0% { filter: drop-shadow(0 0 18px #00d4ff88) drop-shadow(0 0 14px #3c9eff77);}
   100% { filter: drop-shadow(0 0 44px #00d4ffcc) drop-shadow(0 0 38px #3c9eff99);}
@@ -59,7 +63,8 @@ body {
 .ai-logo svg {
   transition: filter 0.3s;
 }
-.ai-logo:hover svg,
+/* تعديل: إزالة تأثيرات الهوفر والـ active هنا لكي لا تتعارض مع message-active */
+/* .ai-logo:hover svg,
 .ai-logo.active svg {
   filter: drop-shadow(0 0 54px #00d4ff) drop-shadow(0 0 44px #3c9eff) brightness(1.7);
   animation: shake .24s linear 1;
@@ -69,17 +74,20 @@ body {
   20% { transform: scale(1.13) rotate(4deg);}
   30% { transform: scale(1.08) rotate(-2deg);}
   100% { transform: scale(1.07) rotate(-2deg);}
-}
+} */
 
+/* تأثير التفاعل الجديد على الأيقونة عند ظهور الرسالة والفيديو (توهج ثابت) */
+/* تم تعديل هذا الكلاس ليكون هو المسؤول الوحيد عن الإضاءة عند تفعيل البوابة */
 .ai-logo.message-active {
-    animation: aiActiveGlow 1.5s infinite alternate;
+    animation: none; /* إيقاف أي أنميشن وميض */
     filter: drop-shadow(0 0 80px #00d4ff) drop-shadow(0 0 50px #3c9eff);
+    transition: filter 0.24s; /* للحفاظ على انتقال سلس */
 }
 
 @keyframes aiActiveGlow {
     0% { filter: drop-shadow(0 0 50px #00d4ff88) drop-shadow(0 0 30px #3c9eff88); transform: scale(1); }
-    50% { filter: drop-shadow(0 0 90px #00d4ffdd) drop-shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
-    100% { filter: drop-shadow(0 0 50px #00d4ff88) drop-shadow(0 0 30px #3c9eff88); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 90px #00d4ffdd) drop_shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
+    100% { filter: drop_shadow(0 0 50px #00d4ff88) drop_shadow(0 0 30px #3c9eff88); transform: scale(1); }
 }
 
 /* Video Portal */
@@ -133,7 +141,7 @@ body {
       transform: translate(-50%, -30%);
   }
 }
-/* Future Message - adjusted to appear below video */
+/* رسالة المستقبل - تم تعديلها لتظهر أسفل الفيديو */
 .ai-portal-message {
   display: none;
   margin: 5px auto 0 auto;
@@ -172,7 +180,7 @@ body {
   100% { text-shadow: 0 0 24px #00d4ffcc, 0 0 26px #3c9effee; }
 }
 
-/* --- Original Instagram Footer (no change) --- */
+/* --- فوتر إنستقرام الأصلي (بدون تغيير) --- */
 .footer-insta {
   width: 100vw;
   padding: 0 0 20px 0;
@@ -211,21 +219,21 @@ body {
   color: #fff;
   box-shadow: 0 8px 36px #b364e288;
 }
-/* Icon and text ordering will be determined by JS via classes */
+/* ترتيب الأيقونة والنص سيتم تحديده بواسطة JS عبر الكلاسات */
 /* .insta-card.ar-layout, .insta-card.en-layout */
 
 .insta-card svg {
   width: 32px; height: 32px;
   margin: 0;
-  filter: drop-shadow(0 0 14px #fa94ff44);
+  filter: drop_shadow(0 0 14px #fa94ff44);
 }
-/* This is the container for "@0alaswad" and "Follow me!" */
+/* هذا هو العنصر الحاوي لـ "@0alaswad" و "تابعني!" */
 .insta-text-group {
     display: flex;
     align-items: center;
     gap: 2px;
 }
-/* Styles for "@0alaswad" itself */
+/* الأنماط الخاصة بـ "@0alaswad" نفسه */
 .insta-username {
   font-family: 'Fira Code','Montserrat','Cairo',monospace;
   letter-spacing: -.04em;
@@ -241,8 +249,8 @@ body {
     font-weight: 400;
 }
 
-/* Flexbox direction control classes within insta-card based on language */
-/* Arabic required order: [Icon] [Follow me!] [@0alaswad] */
+/* كلاسات التحكم في اتجاه Flexbox داخل insta-card بناءً على اللغة */
+/* الترتيب المطلوب للعربي: [أيقونة] [تابعني!] [@0alaswad] */
 .insta-card.ar-layout {
     flex-direction: row-reverse;
 }
@@ -265,7 +273,7 @@ body {
 }
 
 
-/* English required order: [@0alaswad] [Follow me!] [Icon] */
+/* الترتيب المطلوب للإنجليزي: [@0alaswad] [Follow me!] [أيقونة] */
 .insta-card.en-layout {
     flex-direction: row;
 }
@@ -296,7 +304,7 @@ body {
   .insta-card { font-size: 0.93em; padding: 8px 9vw 9px 7vw;}
 }
 
-/* Language Switcher Button */
+/* زر تبديل اللغة */
 .language-switcher {
     position: fixed;
     bottom: 20px;
@@ -317,7 +325,7 @@ body {
     background-color: #0A1931;
 }
 
-/* --- New Card Styles (cards-section) --- */
+/* --- أنماط البطاقات الجديدة (قسم cards-section) --- */
 .cards-section {
     width: 100%;
     max-width: 800px;
@@ -440,7 +448,7 @@ body {
 .page-header h1 {
   margin: 0;
   color: #F0F5F9;
-  font-size: 2.25rem; /* حجم الخط الموحد للعناوين في الصفحات الداخلية */
+  font-size: 2.25rem;
   letter-spacing: 1px;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
@@ -476,23 +484,22 @@ body {
   border-radius: 14px;
   padding: 2.5rem;
   box-shadow: 0 8px 44px #185adb88;
-  max-width: 900px; /* تحديد أقصى عرض للمحتوى */
+  max-width: 900px;
   width: 90%;
-  margin: 2rem auto; /* توسيط القسم الرئيسي */
+  margin: 2rem auto;
   color: #fff;
   text-align: center;
   flex-grow: 1;
-  display: flex; /* لتمكين توسيط المحتوى داخله */
-  flex-direction: column; /* لترتيب العناصر داخله عموديا */
-  align-items: center; /* لتوسيط العناصر أفقيا داخل main-content-section */
-  justify-content: center; /* لتوسيط العناصر عموديا داخل main-content-section */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-/* محتوى النص العام داخل main-content-section */
 .main-content-section p {
-    font-size: 1.1rem; /* حجم خط موحد للمحتوى النصي */
+    font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
-    max-width: 700px; /* لضمان عدم امتداد النص بشكل مبالغ فيه */
+    max-width: 700px;
     width: 100%;
 }
 
@@ -512,8 +519,8 @@ body {
 @media (max-width: 480px) {
   .page-header h1 { font-size: 1.5rem; }
   .page-header nav ul { flex-direction: column; gap: 0.5rem; }
-  .page-header nav ul li { width: 100%; }
-  .page-header nav ul li a { display: block; text-align: center; }
+  nav ul li { width: 100%; }
+  nav ul li a { display: block; text-align: center; }
   .main-content-section { padding: 1rem; margin: 1rem auto; }
 }
 
@@ -523,11 +530,11 @@ body {
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  width: 100%; /* يجب أن يكون 100% ليملأ main-content-section */
-  max-width: 500px; /* تحديد أقصى عرض للنموذج */
-  margin: 1rem auto; /* توسيط النموذج داخل main-content-section */
+  width: 100%;
+  max-width: 500px;
+  margin: 1rem auto;
   color: #fff;
-  text-align: center; /* لتوسيط العناصر الداخلية إذا كانت block */
+  text-align: center;
 }
 .form-container label {
   display: block;
@@ -540,7 +547,7 @@ body {
 .form-container input[type="text"],
 .form-container input[type="email"],
 .form-container textarea {
-  width: calc(100% - 24px); /* لضبط الحجم مع البادينغ */
+  width: calc(100% - 24px);
   padding: 0.75rem;
   margin-bottom: 1.25rem;
   border: 1px solid #185ADB;
@@ -636,8 +643,8 @@ body {
   box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.3);
   color: #fff;
   text-align: right;
-  width: 100%; /* لجعلها تملأ main-content-section */
-  max-width: 600px; /* تحديد أقصى عرض لمجموعة الأسئلة */
+  width: 100%;
+  max-width: 600px;
 }
 .question-group h3 {
   font-size: 1.375rem;
@@ -689,8 +696,8 @@ body {
   border-radius: 14px;
   box-shadow: 0 8px 44px #185adb88;
   color: #fff;
-  width: 100%; /* لجعلها تملأ main-content-section */
-  max-width: 600px; /* تحديد أقصى عرض لبطاقة النتائج */
+  width: 100%;
+  max-width: 600px;
 }
 #resultCard.active {
   opacity: 1;
@@ -718,8 +725,8 @@ body {
   border-radius: 14px;
   box-shadow: 0 8px 44px #185adb88;
   color: #fff;
-  width: 100%; /* لجعلها تملأ main-content-section */
-  max-width: 600px; /* تحديد أقصى عرض لقسم التحليل الأعمق */
+  width: 100%;
+  max-width: 600px;
 }
 #deepResult div {
   background: rgba(255, 255, 255, 0.1);
@@ -736,8 +743,8 @@ body {
   margin-bottom: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
-  width: 100%; /* لجعلها تملأ main-content-section */
-  max-width: 700px; /* تحديد أقصى عرض لبطاقة المشروع */
+  width: 100%;
+  max-width: 700px;
 }
 .project-card:hover {
   transform: translateY(-5px) scale(1.02);
