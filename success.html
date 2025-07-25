@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-ar="تم استلام رسالتك!" data-en="Message Received!">تم استلام رسالتك!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header class="page-header">
+    <h1 data-ar="تواصل معنا ✉️" data-en="Contact Us ✉️">تواصل معنا ✉️</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+        <li><a href="personality-analyzer.html" data-ar="محلل الشخصيات" data-en="Personality Analyzer">محلل الشخصيات</a></li>
+        <li><a href="daily-quotes.html" data-ar="اقتباسات اليوم" data-en="Daily Quotes">اقتباسات اليوم</a></li>
+        <li><a href="secret-projects.html" data-ar="مشاريع خاصة" data-en="Secret Projects">مشاريع خاصة</a></li>
+        <li><a href="message.html" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center p-4">
+    <div class="main-content-section success-message-container mx-auto">
+      <h2 data-ar="<i class='fas fa-check-circle' style='color:#28a745;'></i> تم استلام رسالتك بنجاح!" data-en="<i class='fas fa-check-circle' style='color:#28a745;'></i> Your message has been sent successfully!">
+        <i class="fas fa-check-circle" style="color:#28a745;"></i> تم استلام رسالتك بنجاح!
+      </h2>
+      <p data-ar="شكراً لك على التواصل. سأقوم بمراجعة رسالتك والرد عليك في أقرب وقت ممكن." data-en="Thank you for your message. I will review it and get back to you as soon as possible.">
+        شكراً لك على التواصل. سأقوم بمراجعة رسالتك والرد عليك في أقرب وقت ممكن.
+      </p>
+      <div class="success-links">
+        <a href="index.html" class="btn-primary-custom" data-ar="العودة للصفحة الرئيسية" data-en="Back to Home">العودة للصفحة الرئيسية</a>
+        <a href="secret-projects.html" class="btn-primary-custom" data-ar="استكشف مشاريعي الخاصة" data-en="Explore My Projects">استكشف مشاريعي الخاصة</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-insta">
+    <a href="#" onclick="openInstagram()" class="insta-card" id="instaLink">
+      <div class="insta-text-group">
+        <span class="insta-username">0alaswad</span> <span class="insta-follow" data-ar="تابعني!" data-en="Follow me!">تابعني!</span>
+      </div>
+      <svg viewBox="0 0 448 512">
+        <defs>
+          <linearGradient id="insta-gradient" x1="0" x2="1" y1="0" y2="1">
+            <stop stop-color="#fd5"/>
+            <stop offset="0.4" stop-color="#ff543e"/>
+            <stop offset="0.6" stop-color="#c837ab"/>
+            <stop offset="1" stop-color="#4a54e1"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#insta-gradient)" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9 0 63.6 51.3 114.9 114.9 114.9 63.6 0 114.9-51.3 114.9-114.9 0-63.6-51.3-114.9-114.9-114.9zm0 186.6c-39.6 0-71.7-32.1-71.7-71.7 0-39.6 32.1-71.7 71.7-71.7 39.6 0 71.7 32.1 71.7 71.7 0 39.6-32.1 71.7-71.7 71.7zm146.4-194.3c0 14.9-12 26.9-26.9 26.9s-26.9-12-26.9-26.9 12-26.9 26.9-26.9 26.9 12 26.9 26.9zm76.1 27.2c-1.7-35.3-9.9-66.7-36.2-92.9S371.5 5.7 336.2 4C300.6 2.3 178.4 2.3 142.8 4 107.5 5.7 76.1 13.9 49.9 40.1 23.7 66.4 15.5 97.7 13.8 133c-1.7 35.6-1.7 157.8 0 193.4 1.7 35.3 9.9 66.7 36.2 92.9s57.6 34.5 92.9 36.2c35.6 1.7 157.8 1.7 193.4 0 35.3-1.7 66.7-9.9 92.9-36.2s34.5-57.6 36.2-92.9c1.7-35.6 1.7-157.8 0-193.4zM398.8 388c-7.8 19.5-22.9 34.6-42.4 42.4-29.4 11.7-99.2 9-132.4 9s-103 .6-132.4-9c-19.5-7.8-34.6-22.9-42.4-42.4-11.7-29.4-9-99.2-9-132.4s-.6-103 9-132.4c7.8-19.5 22.9-34.6 42.4-42.4 29.4-11.7 99.2-9 132.4-9s103-.6 132.4 9c19.5 7.8 34.6 22.9 42.4 42.4 11.7 29.4 9 99.2 9 132.4s.6 103-9 132.4z"/>
+      </svg>
+    </a>
+  </footer>
+
+  <div class="language-switcher">
+    <button id="langToggle">English</button>
+  </div>
+
+  <script>
+    function openInstagram() {
+      const username = "0alaswad";
+      const appLink = `instagram://user?username=${username}`;
+      const webLink = `https://www.instagram.com/${username}`;
+      window.location.href = appLink;
+      setTimeout(() => {
+        window.location.href = webLink;
+      }, 1500);
+    }
+
+    // Language Switcher Logic (common for all pages)
+    const langToggleBtn = document.getElementById('langToggle');
+    let currentLang = document.documentElement.lang;
+
+    function updateContent(lang) {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-ar]').forEach(element => {
+        if (lang === 'ar') {
+          element.textContent = element.getAttribute('data-ar');
+        } else {
+          element.textContent = element.getAttribute('data-en');
+        }
+      });
+      // Handle HTML content for the success message with icon
+      const successH2 = document.querySelector('.main-content-section h2');
+      if (successH2) {
+          if (lang === 'ar') {
+              successH2.innerHTML = successH2.getAttribute('data-ar');
+          } else {
+              successH2.innerHTML = successH2.getAttribute('data-en');
+          }
+      }
+
+      // Update button text
+      langToggleBtn.textContent = (lang === 'ar') ? 'English' : 'العربية';
+      currentLang = lang;
+    }
+
+    // Initialize language
+    updateContent(currentLang);
+
+    langToggleBtn.addEventListener('click', () => {
+      const newLang = (currentLang === 'ar') ? 'en' : 'ar';
+      updateContent(newLang);
+    });
+
+    // Update insta-card layout based on language
+    function updateInstaLayout(lang) {
+        const instaCard = document.getElementById('instaLink');
+        if (instaCard) {
+            if (lang === 'ar') {
+                instaCard.classList.remove('en-layout');
+                instaCard.classList.add('ar-layout');
+            } else {
+                instaCard.classList.remove('ar-layout');
+                instaCard.classList.add('en-layout');
+            }
+        }
+    }
+    updateInstaLayout(currentLang);
+    langToggleBtn.addEventListener('click', () => {
+        const newLang = (currentLang === 'ar') ? 'en' : 'ar';
+        updateInstaLayout(newLang);
+    });
+  </script>
+</body>
+</html>

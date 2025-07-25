@@ -175,7 +175,7 @@ const instaSvg = instaCard ? instaCard.querySelector('svg') : null; // للحص�
 const instaTextGroup = instaCard ? instaCard.querySelector('.insta-text-group') : null; // للحصول على مجموعة النصوص
 
 
-const instaAccountName = '0alaswad'; // اسم حساب الانستجرام الثابت
+const instaAccountName = '0alaswad'; // اسم حساب الانستجرام الثابت (تمت إزالة علامة @)
 
 let currentLang = 'ar'; // اللغة الافتراضية
 
@@ -262,6 +262,7 @@ function setLanguage(lang) {
     updateInstagramLink();
 }
 
+
 // دالة لتحديث رابط انستجرام لفتح التطبيق أولاً
 function updateInstagramLink() {
     const username = '0alaswad'; // اسم المستخدم الخاص بك
@@ -290,10 +291,6 @@ function updateInstagramLink() {
 // تعيين اللغة الافتراضية عند التحميل
 document.addEventListener('DOMContentLoaded', () => {
     setLanguage('ar'); // ابدأ باللغة العربية
-    // تحديث سنة حقوق النشر تلقائيا في الفوتر
-    // ملاحظة: لم أجد عنصر "currentYear" في HTML الأصلي، إذا كنت تريد هذا، ستحتاج لإضافته.
-    // مثال: <span id="currentYear"></span>
-    // document.getElementById('currentYear').textContent = new Date().getFullYear();
     updateInstagramLink(); // تحديث الرابط عند تحميل الصفحة
 });
 

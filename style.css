@@ -2,25 +2,25 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: 'Cairo', 'Tajawal', 'Orbitron', sans-serif;
-  /* تأكد أن هذا المسار صحيح لملف الخلفية لديك (brain-bg-ai.png) */
   background:
     url('brain-bg-ai.png') center center/cover no-repeat,
     linear-gradient(135deg, #185ADB 0%, #0A1931 60%, #222831 100%);
+  background-size: cover; /* تأكيد تغطية الخلفية */
+  background-position: center center; /* تأكيد توسيط الخلفية */
   color: #fff;
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  min-height: 100vh;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .header-centerbox {
-  margin: 65px auto 0 auto;
-  padding: 36px 34px 26px 34px;
+  margin: 10px auto 10vh auto;
+  padding: 10px 25px 8px 25px;
   background: rgba(10, 25, 49, 0.64);
   backdrop-filter: blur(12px);
   border-radius: 32px;
   box-shadow: 0 8px 44px #185adb88;
-  max-width: 650px;
+  max-width: 600px;
   min-width: 260px;
   width: 90vw;
   display: flex;
@@ -33,17 +33,17 @@ body {
 }
 @media (max-width: 700px) {
   .header-centerbox {
-    padding: 22px 7vw 16px 7vw;
+    padding: 8px 4vw 6px 4vw;
     max-width: 98vw;
     border-radius: 18px;
-    margin: 32px auto 0 auto;
+    margin: 8px auto 5vh auto;
   }
-  .hero-title { font-size: 1.2rem; }
-  .hero-desc { font-size: .96rem; }
+  .hero-title { font-size: 0.9rem; }
+  .hero-desc { font-size: 0.75rem; }
 }
-/* أيقونة AI ووميضها */
+/* AI Logo and its glow */
 .ai-logo {
-  margin-bottom: 18px;
+  margin-bottom: 5px;
   position: relative;
   display: inline-block;
   filter: drop-shadow(0 0 24px #3c9effbb) drop-shadow(0 0 12px #00d4ff66);
@@ -71,10 +71,9 @@ body {
   100% { transform: scale(1.07) rotate(-2deg);}
 }
 
-/* تأثير التفاعل الجديد على الأيقونة عند ظهور الرسالة */
 .ai-logo.message-active {
-    animation: aiActiveGlow 1.5s infinite alternate; /* أنميشن توهج جديد */
-    filter: drop-shadow(0 0 80px #00d4ff) drop-shadow(0 0 50px #3c9eff); /* توهج قوي وواضح */
+    animation: aiActiveGlow 1.5s infinite alternate;
+    filter: drop-shadow(0 0 80px #00d4ff) drop-shadow(0 0 50px #3c9eff);
 }
 
 @keyframes aiActiveGlow {
@@ -83,27 +82,26 @@ body {
     100% { filter: drop-shadow(0 0 50px #00d4ff88) drop-shadow(0 0 30px #3c9eff88); transform: scale(1); }
 }
 
-
-/* بوابة الفيديو - تم تكبيرها وتحريكها للأسفل أكثر */
+/* Video Portal */
 .ai-portal {
-  display: none; /* مخفي افتراضيا */
+  display: none;
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -10%); /* تم تعديل هذه القيمة لتحريكها للأسفل أكثر */
-  width: 880px; /* تم تكبير العرض أكثر */
-  height: 500px; /* تم تكبير الارتفاع مع الحفاظ على النسبة التقريبية (1.76:1) */
+  transform: translate(-50%, -10%);
+  width: 880px;
+  height: 500px;
   border-radius: 1000px;
   overflow: hidden;
   box-shadow: 0 0 64px 25px #00d4ff99, 0 0 130px 38px #3c9eff66;
   background: rgba(10,25,49,0.96);
   z-index: 40;
-  opacity: 0; /* للتحكم في تلاشي الظهور */
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* إضافة انتقال للأوباسيتي والتحويل */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 .ai-portal.show {
   opacity: 1;
-  transform: translate(-50%, -10%) scale(1); /* يجب أن تتطابق مع القيمة أعلاه */
+  transform: translate(-50%, -10%) scale(1);
 }
 .ai-portal video {
   width: 100%; height: 100%;
@@ -129,24 +127,24 @@ body {
 }
 @media (max-width: 700px) {
   .ai-portal {
-      width: 98vw; /* استخدام عرض الشاشة بالكامل تقريباً */
-      height: 55.68vw; /* للحفاظ على النسبة 1.76:1 مع 98vw (98 * (500/880)) */
+      width: 98vw;
+      height: 55.68vw;
       min-height: 200px;
-      transform: translate(-50%, -30%); /* قيمة مخصصة للموبايل لضمان أنها ليست منخفضة جداً */
+      transform: translate(-50%, -30%);
   }
 }
-/* رسالة المستقبل - تم تعديلها لتظهر أسفل الفيديو */
+/* Future Message - adjusted to appear below video */
 .ai-portal-message {
-  display: none; /* مخفي افتراضيا */
-  margin: 28px auto 0 auto; /* هذا سيضعها أسفل الأيقونة بشكل طبيعي */
+  display: none;
+  margin: 5px auto 0 auto;
   background: rgba(10,25,49,0.88);
   color: #fff;
-  padding: 10px 26px;
+  padding: 5px 15px;
   border-radius: 15px;
-  font-size: 1.18rem;
+  font-size: 0.85rem;
   font-weight: bold;
   box-shadow: 0 4px 30px #00d4ff33;
-  opacity: 0; /* للتحكم في تلاشي الظهور */
+  opacity: 0;
   transition: opacity 0.5s;
   text-align: center;
   max-width: 97vw;
@@ -162,7 +160,7 @@ body {
 }
 .ai-year {
   color: #00d4ff;
-  font-size: 1.28em;
+  font-size: 1.1em;
   font-weight: bold;
   text-shadow: 0 0 8px #00d4ffcc, 0 0 14px #3c9effaa;
   letter-spacing: 1px;
@@ -174,30 +172,31 @@ body {
   100% { text-shadow: 0 0 24px #00d4ffcc, 0 0 26px #3c9effee; }
 }
 
-/* --- فوتر إنستقرام المُحدث تماماً (بناءً على تصميمك الأصلي) --- */
+/* --- Original Instagram Footer (no change) --- */
 .footer-insta {
   width: 100vw;
   padding: 0 0 20px 0;
   background: transparent;
   display: flex;
   align-items: flex-end;
-  justify-content: center; /* الفوتر في المنتصف أفقياً */
-  position: fixed;
+  justify-content: center;
+  position: relative;
   left: 0; bottom: 0;
   z-index: 12;
-  pointer-events: none; /* يمنع الفوتر من حجب النقرات على العناصر أسفله */
+  pointer-events: none;
+  margin-top: auto;
 }
 .insta-card {
-  pointer-events: auto; /* يسمح للنقرات على البطاقة نفسها */
+  pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 13px; /* المسافة بين العناصر */
-  background: linear-gradient(90deg,rgba(255,255,255,.12),rgba(0,212,255,.13),rgba(20,35,57,.20)); /* الخلفية الشفافة الجميلة */
+  gap: 13px;
+  background: linear-gradient(90deg,rgba(255,255,255,.12),rgba(0,212,255,.13),rgba(20,35,57,.20));
   border-radius: 2.3em;
   box-shadow: 0 2px 22px #0ad4ff22,0 0 1px #0a233377;
   padding: 9px 32px 10px 22px;
   transition: box-shadow .23s, background .19s;
-  font-family: 'Montserrat','Cairo',sans-serif; /* الخط العام لبطاقة انستقرام */
+  font-family: 'Montserrat','Cairo',sans-serif;
   font-size: 1.18rem;
   font-weight: 800;
   color: #fff;
@@ -208,11 +207,11 @@ body {
   margin-bottom: 9px;
 }
 .insta-card:hover {
-  background: linear-gradient(90deg,#fd5 6%,#ff543e 38%,#c837ab 65%,#4a54e1 100%); /* تأثير التمرير اللوني */
+  background: linear-gradient(90deg,#fd5 6%,#ff543e 38%,#c837ab 65%,#4a54e1 100%);
   color: #fff;
   box-shadow: 0 8px 36px #b364e288;
 }
-/* ترتيب الأيقونة والنص سيتم تحديده بواسطة JS عبر الكلاسات */
+/* Icon and text ordering will be determined by JS via classes */
 /* .insta-card.ar-layout, .insta-card.en-layout */
 
 .insta-card svg {
@@ -220,21 +219,21 @@ body {
   margin: 0;
   filter: drop-shadow(0 0 14px #fa94ff44);
 }
-/* هذا هو العنصر الحاوي لـ "@0alaswad" و "تابعني!" */
+/* This is the container for "@0alaswad" and "Follow me!" */
 .insta-text-group {
     display: flex;
     align-items: center;
-    gap: 2px; /* المسافة بين @0alaswad و "تابعني!" */
+    gap: 2px;
 }
-/* الأنماط الخاصة بـ "@0alaswad" نفسه */
+/* Styles for "@0alaswad" itself */
 .insta-username {
-  font-family: 'Fira Code','Montserrat','Cairo',monospace; /* استخدام Fira Code لاسم المستخدم بالكامل */
+  font-family: 'Fira Code','Montserrat','Cairo',monospace;
   letter-spacing: -.04em;
   font-size: 1.1em;
   font-weight: 700;
   color: #fff;
-  font-feature-settings: "zero"; /* تفعيل ميزة الصفر المائل في Fira Code */
-  font-variant-numeric: slashed-zero; /* بديل/إضافة لتأثير الصفر المائل */
+  font-feature-settings: "zero";
+  font-variant-numeric: slashed-zero;
 }
 .insta-follow {
     font-size: .97em;
@@ -242,62 +241,62 @@ body {
     font-weight: 400;
 }
 
-/* كلاسات التحكم في اتجاه Flexbox داخل insta-card بناءً على اللغة */
-/* الترتيب المطلوب للعربي: [أيقونة] [تابعني!] [@0alaswad] */
+/* Flexbox direction control classes within insta-card based on language */
+/* Arabic required order: [Icon] [Follow me!] [@0alaswad] */
 .insta-card.ar-layout {
-    flex-direction: row-reverse; /* يجعل الأيقونة على اليمين في LTR، أو اليسار في RTL */
+    flex-direction: row-reverse;
 }
-.insta-card.ar-layout > svg { /* الأيقونة */
-    order: 1; /* لجعلها أول عنصر في ترتيب flex-direction: row-reverse، أي أقصى اليمين في LTR */
+.insta-card.ar-layout > svg {
+    order: 1;
 }
-.insta-card.ar-layout .insta-text-group { /* مجموعة النصوص */
-    order: 2; /* لجعلها ثاني عنصر */
-    flex-direction: row-reverse; /* لجعل "تابعني!" قبل "@0alaswad" */
-    margin-right: 7px; /* مسافة بين مجموعة النصوص والأيقونة */
+.insta-card.ar-layout .insta-text-group {
+    order: 2;
+    flex-direction: row-reverse;
+    margin-right: 7px;
     margin-left: 0;
 }
 .insta-card.ar-layout .insta-follow {
-    margin-right: 0; /* لا حاجة لهامش يمين هنا */
-    margin-left: 7px; /* مسافة بين "!تابعني" و "@0alaswad" */
+    margin-right: 0;
+    margin-left: 7px;
 }
 .insta-card.ar-layout .insta-username {
-    margin-left: 0; /* تأكيد عدم وجود هامش يسار */
-    margin-right: 0; /* تأكيد عدم وجود هامين يمين */
-}
-
-
-/* الترتيب المطلوب للإنجليزي: [@0alaswad] [Follow me!] [أيقونة] */
-.insta-card.en-layout {
-    flex-direction: row; /* يجعل النص على اليسار في LTR، أو اليمين في RTL */
-}
-.insta-card.en-layout > svg { /* الأيقونة */
-    order: 3; /* لجعلها آخر عنصر في ترتيب flex-direction: row، أي أقصى اليمين في LTR */
-}
-.insta-card.en-layout .insta-text-group { /* مجموعة النصوص */
-    order: 1; /* لجعلها أول عنصر */
-    flex-direction: row; /* لجعل "@0alaswad" قبل "Follow me!" */
     margin-left: 0;
-    margin-right: 7px; /* مسافة بين مجموعة النصوص والأيقونة */
+    margin-right: 0;
+}
+
+
+/* English required order: [@0alaswad] [Follow me!] [Icon] */
+.insta-card.en-layout {
+    flex-direction: row;
+}
+.insta-card.en-layout > svg {
+    order: 3;
+}
+.insta-card.en-layout .insta-text-group {
+    order: 1;
+    flex-direction: row;
+    margin-left: 0;
+    margin-right: 7px;
 }
 .insta-card.en-layout .insta-follow {
-    margin-left: 7px; /* مسافة بين "Follow me!" و "@0alaswad" */
+    margin-left: 7px;
     margin-right: 0;
 }
 .insta-card.en-layout .insta-username {
-    margin-left: 0; /* تأكيد عدم وجود هامش يسار */
-    margin-right: 0; /* تأكيد عدم وجود هامش يمين */
+    margin-left: 0;
+    margin-right: 0;
 }
 
 
 @media (max-width: 700px) {
-  .header-centerbox { padding: 11px 4vw 10px 4vw; }
-  .hero-title { font-size: 1.02rem; }
-  .hero-desc { font-size: .93rem; }
+  .header-centerbox { padding: 6px 3vw 5px 3vw; }
+  .hero-title { font-size: 0.8rem; }
+  .hero-desc { font-size: 0.7rem; }
   .footer-insta { padding: 0 0 15px 0; }
-  .insta-card { font-size: .93em; padding: 8px 9vw 9px 7vw;}
+  .insta-card { font-size: 0.93em; padding: 8px 9vw 9px 7vw;}
 }
 
-/* زر تبديل اللغة */
+/* Language Switcher Button */
 .language-switcher {
     position: fixed;
     bottom: 20px;
@@ -316,4 +315,448 @@ body {
 }
 .language-switcher button:hover {
     background-color: #0A1931;
+}
+
+/* --- New Card Styles (cards-section) --- */
+.cards-section {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 10px;
+    z-index: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    flex-grow: 1;
+    align-items: flex-start;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 212, 255, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 130px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 12px rgba(0, 212, 255, 0.18);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.5));
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.card-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.card-title {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #FFFFFF;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.card-description {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #F8F8F8;
+    font-weight: 600;
+    text-shadow: 0 0 4px rgba(0,0,0,0.8);
+}
+
+@media (max-width: 900px) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .cards-section {
+        margin: 0 auto;
+        padding: 0 8px;
+    }
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .feature-card {
+        padding: 15px;
+        min-height: 120px;
+    }
+    .card-icon {
+        font-size: 2.5rem;
+    }
+    .card-title {
+        font-size: 1.15rem;
+    }
+    .card-description {
+        font-size: 0.8rem;
+    }
+}
+
+/* New/Updated styles for consistent pages */
+.page-header {
+  background: rgba(10, 25, 49, 0.64);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 44px #185adb88;
+  padding: 1.5rem 1rem;
+  border-radius: 32px;
+  margin: 20px auto 30px auto;
+  max-width: 600px;
+  min-width: 260px;
+  width: 90vw;
+  text-align: center;
+}
+.page-header h1 {
+  margin: 0;
+  color: #F0F5F9;
+  font-size: 2.25rem; /* حجم الخط الموحد للعناوين في الصفحات الداخلية */
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.page-header nav ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.page-header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.125rem;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+.page-header nav ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 5px #00d4ff;
+  transform: translateY(-2px);
+  color: #00d4ff;
+}
+
+.main-content-section {
+  background: rgba(10, 25, 49, 0.64);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 44px #185adb88;
+  max-width: 900px; /* تحديد أقصى عرض للمحتوى */
+  width: 90%;
+  margin: 2rem auto; /* توسيط القسم الرئيسي */
+  color: #fff;
+  text-align: center;
+  flex-grow: 1;
+  display: flex; /* لتمكين توسيط المحتوى داخله */
+  flex-direction: column; /* لترتيب العناصر داخله عموديا */
+  align-items: center; /* لتوسيط العناصر أفقيا داخل main-content-section */
+  justify-content: center; /* لتوسيط العناصر عموديا داخل main-content-section */
+}
+/* محتوى النص العام داخل main-content-section */
+.main-content-section p {
+    font-size: 1.1rem; /* حجم خط موحد للمحتوى النصي */
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 700px; /* لضمان عدم امتداد النص بشكل مبالغ فيه */
+    width: 100%;
+}
+
+
+@media (max-width: 700px) {
+  .page-header {
+    padding: 8px 4vw 6px 4vw;
+    max-width: 98vw;
+    border-radius: 18px;
+    margin: 8px auto 5vh auto;
+  }
+  .page-header h1 { font-size: 1.75rem; }
+  .page-header nav ul { gap: 0.75rem; }
+  .page-header nav ul li a { font-size: 1rem; padding: 0.4rem 0.6rem; }
+  .main-content-section { padding: 1.5rem; margin: 1.5rem auto; }
+}
+@media (max-width: 480px) {
+  .page-header h1 { font-size: 1.5rem; }
+  .page-header nav ul { flex-direction: column; gap: 0.5rem; }
+  .page-header nav ul li { width: 100%; }
+  .page-header nav ul li a { display: block; text-align: center; }
+  .main-content-section { padding: 1rem; margin: 1rem auto; }
+}
+
+/* Forms and Buttons General Styling for all pages */
+.form-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  width: 100%; /* يجب أن يكون 100% ليملأ main-content-section */
+  max-width: 500px; /* تحديد أقصى عرض للنموذج */
+  margin: 1rem auto; /* توسيط النموذج داخل main-content-section */
+  color: #fff;
+  text-align: center; /* لتوسيط العناصر الداخلية إذا كانت block */
+}
+.form-container label {
+  display: block;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+}
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container textarea {
+  width: calc(100% - 24px); /* لضبط الحجم مع البادينغ */
+  padding: 0.75rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #185ADB;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #222831;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: right;
+}
+.form-container input:focus,
+.form-container textarea:focus {
+  outline: none;
+  border-color: #00d4ff;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3);
+  background-color: #fff;
+}
+.form-container textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.btn-primary-custom {
+  background: linear-gradient(135deg, #00d4ff 0%, #185ADB 100%);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  font-size: 1.125rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.btn-primary-custom:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 3px 8px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #185ADB, #0A1931);
+}
+.btn-primary-custom:active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.message-box-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.message-box {
+  background: rgba(10,25,49,0.96);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 64px 25px #00d4ff99, 0 0 130px 38px #3c9eff66;
+  text-align: center;
+  z-index: 1001;
+  max-width: 400px;
+  width: 90%;
+  color: #fff;
+  font-size: 1.125rem;
+}
+.message-box p {
+  margin-bottom: 1.25rem;
+  color: #fff;
+}
+.message-box button {
+  background: linear-gradient(135deg, #00d4ff, #185ADB);
+  color: #fff;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.message-box button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Personality Analyzer Specific Styles */
+.question-group {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  text-align: right;
+  width: 100%; /* لجعلها تملأ main-content-section */
+  max-width: 600px; /* تحديد أقصى عرض لمجموعة الأسئلة */
+}
+.question-group h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #00d4ff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.question-group .options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.question-group label {
+  display: flex;
+  align-items: center;
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: #F0F5F9;
+}
+.question-group label:hover {
+  background-color: rgba(0, 212, 255, 0.1);
+  transform: translateX(-5px);
+}
+.question-group input[type="radio"] {
+  margin-left: 0.75rem;
+  accent-color: #00d4ff;
+  transform: scale(1.2);
+  transition: transform 0.2s ease;
+  min-width: 20px;
+  min-height: 20px;
+}
+.question-group input[type="radio"]:checked {
+  transform: scale(1.4);
+}
+.question-group label span {
+  flex-grow: 1;
+  text-align: right;
+}
+#resultCard {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(.61,-0.07,.58,1.05);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 8px 44px #185adb88;
+  color: #fff;
+  width: 100%; /* لجعلها تملأ main-content-section */
+  max-width: 600px; /* تحديد أقصى عرض لبطاقة النتائج */
+}
+#resultCard.active {
+  opacity: 1;
+}
+.bar {
+  height: 20px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.bar-bg {
+  background: rgba(255, 255, 255, 0.2);
+  width: 100%;
+}
+.bar-fill {
+  background: linear-gradient(90deg, #00d4ff, #185ADB);
+}
+.trait-title {
+  font-size: 1.05rem;
+  font-weight: bold;
+  color: #00d4ff;
+}
+#deepAnalysisSection {
+  background: rgba(10, 25, 49, 0.64);
+  backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: 0 8px 44px #185adb88;
+  color: #fff;
+  width: 100%; /* لجعلها تملأ main-content-section */
+  max-width: 600px; /* تحديد أقصى عرض لقسم التحليل الأعمق */
+}
+#deepResult div {
+  background: rgba(255, 255, 255, 0.1);
+  color: #F0F5F9;
+}
+
+/* Projects page specific styling */
+.project-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), inset 0 0 8px rgba(0, 0, 0, 0.1);
+  color: #F0F5F9;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  width: 100%; /* لجعلها تملأ main-content-section */
+  max-width: 700px; /* تحديد أقصى عرض لبطاقة المشروع */
+}
+.project-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.15);
+}
+.project-card h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #00d4ff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.project-card p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.project-card a {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 1.125rem;
 }
