@@ -33,7 +33,7 @@
       </p>
       <div class="success-links">
         <a href="index.html" class="btn-primary-custom" data-ar="العودة للصفحة الرئيسية" data-en="Back to Home">العودة للصفحة الرئيسية</a>
-        </div>
+      </div>
     </div>
   </main>
 
@@ -71,22 +71,20 @@
       }, 1500);
     }
 
-    // Language Switcher Logic (common for all pages)
+    // Language Switcher Logic (Updated for persistence)
     const langToggleBtn = document.getElementById('langToggle');
-    let currentLang = document.documentElement.lang;
+    let currentLang = localStorage.getItem('currentLang') || document.documentElement.lang;
 
     function updateContent(lang) {
       document.documentElement.lang = lang;
       document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
 
       document.querySelectorAll('[data-ar]').forEach(element => {
-        if (lang === 'ar') {
-          element.textContent = element.getAttribute('data-ar');
-        } else {
-          element.textContent = element.getAttribute('data-en');
+        if (element.hasAttribute('data-ar') && element.hasAttribute('data-en')) {
+          element.textContent = (lang === 'ar') ? element.getAttribute('data-ar') : element.getAttribute('data-en');
         }
       });
-      // Handle HTML content for the success message with icon
+
       const successH2 = document.querySelector('.main-content-section h2');
       if (successH2) {
           if (lang === 'ar') {
@@ -96,36 +94,27 @@
           }
       }
 
-      // Update button text
+      const instaCard = document.getElementById('instaLink');
+      if (instaCard) {
+          if (lang === 'ar') {
+              instaCard.classList.remove('en-layout');
+              instaCard.classList.add('ar-layout');
+          } else {
+              instaCard.classList.remove('ar-layout');
+              instaCard.classList.add('en-layout');
+          }
+      }
+
       langToggleBtn.textContent = (lang === 'ar') ? 'English' : 'العربية';
       currentLang = lang;
+      localStorage.setItem('currentLang', lang);
     }
 
-    // Initialize language
     updateContent(currentLang);
 
     langToggleBtn.addEventListener('click', () => {
       const newLang = (currentLang === 'ar') ? 'en' : 'ar';
       updateContent(newLang);
-    });
-
-    // Update insta-card layout based on language
-    function updateInstaLayout(lang) {
-        const instaCard = document.getElementById('instaLink');
-        if (instaCard) {
-            if (lang === 'ar') {
-                instaCard.classList.remove('en-layout');
-                instaCard.classList.add('ar-layout');
-            } else {
-                instaCard.classList.remove('ar-layout');
-                instaCard.classList.add('en-layout');
-            }
-        }
-    }
-    updateInstaLayout(currentLang);
-    langToggleBtn.addEventListener('click', () => {
-        const newLang = (currentLang === 'ar') ? 'en' : 'ar';
-        updateInstaLayout(newLang);
     });
   </script>
 </body>

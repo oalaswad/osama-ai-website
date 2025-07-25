@@ -27,9 +27,8 @@
       <p class="text-xl leading-relaxed mb-6" data-ar="هل لديك سؤال، اقتراح، أو ترغب في التعاون؟ لا تتردد في التواصل معي!" data-en="Do you have a question, suggestion, or wish to collaborate? Feel free to contact me!">
         هل لديك سؤال، اقتراح، أو ترغب في التعاون؟ لا تتردد في التواصل معي!
       </p>
-      <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify action="/success.html" class="form-container mx-auto">
+      <form id="contactForm" name="contact" method="POST" data-netlify="true" netlify action="/success.html" class="form-container">
         <input type="hidden" name="form-name" value="contact" />
-                </p>
         <label for="name" data-ar="الاسم:" data-en="Name:">الاسم:</label>
         <input type="text" id="name" name="name" placeholder="اسمك (اختياري)" data-ar-placeholder="اسمك (اختياري)" data-en-placeholder="Your Name (Optional)">
         <label for="email" data-ar="البريد الإلكتروني:" data-en="Email:">البريد الإلكتروني:</label>
@@ -73,12 +72,15 @@
           overlay.className = 'message-box-overlay';
           const messageBox = document.createElement('div');
           messageBox.className = 'message-box';
-          messageBox.innerHTML = `<p>${message}</p><button id="closeMessageBox" class="btn-primary-custom">حسناً</button>`;
+          messageBox.innerHTML = `<p>${message}</p><button id="closeMessageBox" class="btn-primary-custom" data-ar="حسناً" data-en="Ok">حسناً</button>`;
           overlay.appendChild(messageBox);
           document.body.appendChild(overlay);
           document.getElementById('closeMessageBox').addEventListener('click', () => {
               overlay.remove();
           });
+          const closeBtn = document.getElementById('closeMessageBox');
+          const currentLang = localStorage.getItem('currentLang') || 'ar'; // Read from localStorage
+          closeBtn.textContent = (currentLang === 'ar') ? closeBtn.getAttribute('data-ar') : closeBtn.getAttribute('data-en');
       }
       function openInstagram() {
         const username = "0alaswad";
@@ -105,44 +107,54 @@
             if (response.ok) {
               window.location.href = contactForm.action;
             } else {
-              showMessageBox('حدث خطأ أثناء إرسال رسالتك. الرجاء المحاولة مرة أخرى.', false);
+              const currentLang = localStorage.getItem('currentLang') || 'ar'; // Read from localStorage
+              const errorMessage = (currentLang === 'ar') ? 'حدث خطأ أثناء إرسال رسالتك. الرجاء المحاولة مرة أخرى.' : 'An error occurred while sending your message. Please try again.';
+              showMessageBox(errorMessage, false);
             }
           } catch (error) {
-            showMessageBox('حدث خطأ في الاتصال. الرجاء التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.', false);
+            const currentLang = localStorage.getItem('currentLang') || 'ar'; // Read from localStorage
+            const networkError = (currentLang === 'ar') ? 'حدث خطأ في الاتصال. الرجاء التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.' : 'A connection error occurred. Please check your internet connection and try again.';
+            showMessageBox(networkError, false);
           }
         });
       }
 
-      // Language Switcher Logic (common for all pages)
+      // Language Switcher Logic (Updated for persistence)
       const langToggleBtn = document.getElementById('langToggle');
-      let currentLang = document.documentElement.lang;
+      let currentLang = localStorage.getItem('currentLang') || document.documentElement.lang;
 
       function updateContent(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
 
         document.querySelectorAll('[data-ar]').forEach(element => {
-          if (lang === 'ar') {
-            element.textContent = element.getAttribute('data-ar');
-          } else {
-            element.textContent = element.getAttribute('data-en');
+          if (element.hasAttribute('data-ar') && element.hasAttribute('data-en')) {
+            element.textContent = (lang === 'ar') ? element.getAttribute('data-ar') : element.getAttribute('data-en');
           }
         });
 
         document.querySelectorAll('[data-ar-placeholder]').forEach(element => {
-            if (lang === 'ar') {
-                element.placeholder = element.getAttribute('data-ar-placeholder');
-            } else {
-                element.placeholder = element.getAttribute('data-en-placeholder');
+            if (element.hasAttribute('data-ar-placeholder') && element.hasAttribute('data-en-placeholder')) {
+                element.placeholder = (lang === 'ar') ? element.getAttribute('data-ar-placeholder') : element.getAttribute('data-en-placeholder');
             }
         });
 
-        // Update button text
+        const instaCard = document.getElementById('instaLink');
+        if (instaCard) {
+            if (lang === 'ar') {
+                instaCard.classList.remove('en-layout');
+                instaCard.classList.add('ar-layout');
+            } else {
+                instaCard.classList.remove('ar-layout');
+                instaCard.classList.add('en-layout');
+            }
+        }
+
         langToggleBtn.textContent = (lang === 'ar') ? 'English' : 'العربية';
         currentLang = lang;
+        localStorage.setItem('currentLang', lang);
       }
 
-      // Initialize language
       updateContent(currentLang);
 
       langToggleBtn.addEventListener('click', () => {
@@ -150,24 +162,6 @@
         updateContent(newLang);
       });
 
-      // Update insta-card layout based on language
-      function updateInstaLayout(lang) {
-          const instaCard = document.getElementById('instaLink');
-          if (instaCard) {
-              if (lang === 'ar') {
-                  instaCard.classList.remove('en-layout');
-                  instaCard.classList.add('ar-layout');
-              } else {
-                  instaCard.classList.remove('ar-layout');
-                  instaCard.classList.add('en-layout');
-              }
-          }
-      }
-      updateInstaLayout(currentLang);
-      langToggleBtn.addEventListener('click', () => {
-          const newLang = (currentLang === 'ar') ? 'en' : 'ar';
-          updateInstaLayout(newLang);
-      });
     });
   </script>
 </body>

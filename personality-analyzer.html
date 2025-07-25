@@ -323,7 +323,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      let currentLang = document.documentElement.lang;
+      let currentLang = localStorage.getItem('currentLang') || document.documentElement.lang; // Read from localStorage or default
 
       document.getElementById('personalityForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -387,7 +387,7 @@
         setTimeout(() => { window.location.href = webLink; }, 1500);
       }
 
-      // Language Switcher Logic (common for all pages)
+      // Language Switcher Logic (Updated for persistence)
       const langToggleBtn = document.getElementById('langToggle');
 
       function updateContent(lang) {
@@ -395,31 +395,30 @@
         document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
 
         document.querySelectorAll('[data-ar]').forEach(element => {
-          if (lang === 'ar') {
-            element.textContent = element.getAttribute('data-ar');
-          } else {
-            element.textContent = element.getAttribute('data-en');
+          if (element.hasAttribute('data-ar') && element.hasAttribute('data-en')) {
+            element.textContent = (lang === 'ar') ? element.getAttribute('data-ar') : element.getAttribute('data-en');
           }
         });
         document.querySelectorAll('[data-ar-placeholder]').forEach(element => {
-            if (lang === 'ar') {
-                element.placeholder = element.getAttribute('data-ar-placeholder');
-            } else {
-                element.placeholder = element.getAttribute('data-en-placeholder');
+            if (element.hasAttribute('data-ar-placeholder') && element.hasAttribute('data-en-placeholder')) {
+                element.placeholder = (lang === 'ar') ? element.getAttribute('data-ar-placeholder') : element.getAttribute('data-en-placeholder');
             }
         });
-        // Update button text
+        const instaCard = document.getElementById('instaLink');
+        if (instaCard) {
+            if (lang === 'ar') {
+                instaCard.classList.remove('en-layout');
+                instaCard.classList.add('ar-layout');
+            } else {
+                instaCard.classList.remove('ar-layout');
+                instaCard.classList.add('en-layout');
+            }
+        }
+
         langToggleBtn.textContent = (lang === 'ar') ? 'English' : 'العربية';
-        currentLang = lang; // Update currentLang
-      }
+        currentLang = lang;
+        localStorage.setItem('currentLang', lang);
 
-      // Initialize language
-      updateContent(currentLang);
-
-      langToggleBtn.addEventListener('click', () => {
-        const newLang = (currentLang === 'ar') ? 'en' : 'ar';
-        updateContent(newLang);
-        // Re-analyze and show results if card is active, to update language in results
         const resultCard = document.getElementById('resultCard');
         if (resultCard && resultCard.classList.contains('active')) {
             const currentAnswers = {};
@@ -427,29 +426,37 @@
                 const checkedRadio = document.querySelector(`input[name="q${i}"]:checked`);
                 if(checkedRadio) currentAnswers['q'+i] = checkedRadio.value;
             }
-            if (Object.keys(currentAnswers).length === 10) { // All questions answered
+            if (Object.keys(currentAnswers).length === 10) {
                 const scores = analyzeBigFive(currentAnswers);
-                showBigFiveResults(scores, currentLang);
+                showBigFiveResults(scores, lang); // إعادة عرض النتائج باللغة الجديدة
             }
         }
-      });
-      // Update insta-card layout based on language
-      function updateInstaLayout(lang) {
-          const instaCard = document.getElementById('instaLink');
-          if (instaCard) {
-              if (lang === 'ar') {
-                  instaCard.classList.remove('en-layout');
-                  instaCard.classList.add('ar-layout');
-              } else {
-                  instaCard.classList.remove('ar-layout');
-                  instaCard.classList.add('en-layout');
-              }
-          }
+        const deepAnalysisSection = document.getElementById('deepAnalysisSection');
+        if (deepAnalysisSection && deepAnalysisSection.style.display !== 'none' && document.getElementById('deepResult').innerHTML !== '') {
+            const currentDeepAnswers = [];
+            for(let i=1;i<=5;i++) {
+                const checkedRadio = document.querySelector(`#deepAnalysisForm input[name="dq${i}"]:checked`);
+                if(checkedRadio) currentDeepAnswers.push(+checkedRadio.value);
+            }
+            if (currentDeepAnswers.length === 5) {
+                let totalScore = currentDeepAnswers.reduce((a,b)=>a+b,0);
+                let resultText = '';
+                for (const desc of DEEP_ANALYSIS_DESCS) {
+                    if (totalScore >= desc.scoreRange[0] && totalScore <= desc.scoreRange[1]) {
+                        resultText = desc[lang]; // استخدم اللغة الجديدة هنا
+                        break;
+                    }
+                }
+                document.getElementById('deepResult').innerHTML = `<div class="p-4 rounded-xl mt-4 text-right">${resultText}</div>`;
+            }
+        }
       }
-      updateInstaLayout(currentLang);
+
+      updateContent(currentLang);
+
       langToggleBtn.addEventListener('click', () => {
-          const newLang = (currentLang === 'ar') ? 'en' : 'ar';
-          updateInstaLayout(newLang);
+        const newLang = (currentLang === 'ar') ? 'en' : 'ar';
+        updateContent(newLang);
       });
     });
   </script>

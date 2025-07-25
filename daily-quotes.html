@@ -62,18 +62,18 @@
     document.addEventListener('DOMContentLoaded', () => {
       const quoteDisplay = document.getElementById('quote-display');
       const newQuoteBtn = document.getElementById('new-quote-btn');
-      let quotes = []; // سيتم ملء هذه المصفوفة من ملف JSON
-      let currentLang = document.documentElement.lang;
+      let quotes = [];
+      let currentLang = localStorage.getItem('currentLang') || document.documentElement.lang;
 
       // Function to fetch quotes from quotes.json
       async function fetchQuotes() {
         try {
-          const response = await fetch('quotes.json'); //
+          const response = await fetch('quotes.json');
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          quotes = await response.json(); //
-          displayRandomQuote(); // Display a quote once loaded
+          quotes = await response.json();
+          displayRandomQuote();
         } catch (error) {
           console.error('Failed to fetch quotes:', error);
           quoteDisplay.innerHTML = `<p class="text-red-500" data-ar="لم يتمكن الموقع من تحميل الاقتباسات حالياً. الرجاء المحاولة لاحقاً." data-en="The site could not load quotes at this time. Please try again later.">${currentLang === 'ar' ? 'لم يتمكن الموقع من تحميل الاقتباسات حالياً. الرجاء المحاولة لاحقاً.' : 'The site could not load quotes at this time. Please try again later.'}</p>`;
@@ -89,9 +89,8 @@
             <p class="mb-4 quote-text">"${randomQuote.text}"</p>
             <p class="text-lg font-semibold author-text">- ${randomQuote.author}</p>
           `;
-          // Update colors for quote and author text to match the new theme
-          quoteDisplay.querySelector('.quote-text').style.color = '#F0F5F9'; // Light text color
-          quoteDisplay.querySelector('.author-text').style.color = '#8FC1E3'; // Lighter blue
+          quoteDisplay.querySelector('.quote-text').style.color = '#F0F5F9';
+          quoteDisplay.querySelector('.author-text').style.color = '#8FC1E3';
         } else {
           quoteDisplay.innerHTML = `<p class="text-red-500" data-ar="لا توجد اقتباسات لعرضها." data-en="No quotes to display.">${currentLang === 'ar' ? 'لا توجد اقتباسات لعرضها.' : 'No quotes to display.'}</p>`;
         }
@@ -108,7 +107,7 @@
       }
       window.openInstagram = openInstagram;
 
-      // Language Switcher Logic (common for all pages)
+      // Language Switcher Logic (Updated for persistence)
       const langToggleBtn = document.getElementById('langToggle');
 
       function updateContent(lang) {
@@ -116,24 +115,37 @@
         document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
 
         document.querySelectorAll('[data-ar]').forEach(element => {
-          // Check for data-ar and data-en attributes for textContent
           if (element.hasAttribute('data-ar') && element.hasAttribute('data-en')) {
             element.textContent = (lang === 'ar') ? element.getAttribute('data-ar') : element.getAttribute('data-en');
           }
-          // Special handling for placeholder attributes
-          if (element.hasAttribute('data-ar-placeholder') && element.hasAttribute('data-en-placeholder')) {
-              element.placeholder = (lang === 'ar') ? element.getAttribute('data-ar-placeholder') : element.getAttribute('data-en-placeholder');
-          }
         });
 
-        // Update button text
+        document.querySelectorAll('[data-ar-placeholder]').forEach(element => {
+            if (element.hasAttribute('data-ar-placeholder') && element.hasAttribute('data-en-placeholder')) {
+                element.placeholder = (lang === 'ar') ? element.getAttribute('data-ar-placeholder') : element.getAttribute('data-en-placeholder');
+            }
+        });
+
+        const instaCard = document.getElementById('instaLink');
+        if (instaCard) {
+            if (lang === 'ar') {
+                instaCard.classList.remove('en-layout');
+                instaCard.classList.add('ar-layout');
+            } else {
+                instaCard.classList.remove('ar-layout');
+                instaCard.classList.add('en-layout');
+            }
+        }
+
         langToggleBtn.textContent = (lang === 'ar') ? 'English' : 'العربية';
-        currentLang = lang; // Update currentLang
-        // Re-display the quote to ensure loading/no-quote messages are in correct language
-        displayRandomQuote();
+        currentLang = lang;
+        localStorage.setItem('currentLang', lang);
+
+        if (typeof displayRandomQuote === 'function') {
+            displayRandomQuote();
+        }
       }
 
-      // Initialize language
       updateContent(currentLang);
 
       langToggleBtn.addEventListener('click', () => {
@@ -141,27 +153,7 @@
         updateContent(newLang);
       });
 
-      // Update insta-card layout based on language
-      function updateInstaLayout(lang) {
-          const instaCard = document.getElementById('instaLink');
-          if (instaCard) {
-              if (lang === 'ar') {
-                  instaCard.classList.remove('en-layout');
-                  instaCard.classList.add('ar-layout');
-              } else {
-                  instaCard.classList.remove('ar-layout');
-                  instaCard.classList.add('en-layout');
-              }
-          }
-      }
-      updateInstaLayout(currentLang);
-      langToggleBtn.addEventListener('click', () => {
-          const newLang = (currentLang === 'ar') ? 'en' : 'ar';
-          updateInstaLayout(newLang);
-      });
-
-      // Fetch quotes when the page loads
-      fetchQuotes(); //
+      fetchQuotes();
       newQuoteBtn.addEventListener('click', displayRandomQuote);
     });
   </script>
