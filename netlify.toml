@@ -5,3 +5,10 @@ publish = "."
 [functions]
 directory = "netlify/functions"
 node_bundler = "esbuild"
+
+# إضافة قاعدة إعادة التوجيه هنا
+[[redirects]]
+  from = "/forms/*"
+  to = "/success.html"
+  status = 200
+  force = true
