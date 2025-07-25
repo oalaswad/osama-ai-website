@@ -13,6 +13,7 @@ body {
   overflow-x: hidden;
   justify-content: flex-start;
   position: relative;
+  box-sizing: border-box; /* التأكد من أن box-sizing مضبوط لجميع العناصر */
 }
 
 body::before {
@@ -84,8 +85,8 @@ body::before {
 }
 
 @keyframes aiActiveGlow {
-    0% { filter: drop-shadow(0 0 50px #00d4ff88) drop-shadow(0 0 30px #3c9eff88); transform: scale(1); }
-    50% { filter: drop-shadow(0 0 90px #00d4ffdd) drop_shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
+    0% { filter: drop-shadow(0 0 50px #00d4ff88) drop_shadow(0 0 30px #3c9eff88); transform: scale(1); }
+    50% { filter: drop_shadow(0 0 90px #00d4ffdd) drop_shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
     100% { filter: drop_shadow(0 0 50px #00d4ff88) drop_shadow(0 0 30px #3c9eff88); transform: scale(1); }
 }
 
@@ -224,7 +225,7 @@ body::before {
 .insta-card svg {
   width: 32px; height: 32px;
   margin: 0;
-  filter: drop-shadow(0 0 14px #fa94ff44);
+  filter: drop_shadow(0 0 14px #fa94ff44);
 }
 /* هذا هو العنصر الحاوي لـ "@0alaswad" و "تابعني!" */
 .insta-text-group {
@@ -525,30 +526,40 @@ body::before {
   .page-header nav ul { flex-direction: column; gap: 0.5rem; }
   nav ul li { width: 100%; }
   nav ul li a { display: block; text-align: center; }
-  .main-content-section { padding: 1rem; margin: 1rem auto; }
+  .main-content-section {
+      padding: 1rem; /* تقليل البادينغ الكلي للقسم الرئيسي على الجوال */
+      margin: 1rem auto;
+      width: calc(100% - 20px); /* عرض ثابت لترك مسافة من الحواف */
+      max-width: none;
+  }
 
   /* تنسيقات خاصة بصفحة التواصل (message.html) على الموبايل */
   .form-container {
       padding: 1rem; /* تقليل البادينغ الداخلي للنموذج */
-      width: 100%; /* زيادة العرض ليملأ المساحة بشكل أفضل */
-      max-width: none; /* إزالة الحد الأقصى للعرض للسماح بملء المساحة المتاحة */
+      width: 100%; /* اجعل النموذج يملأ المساحة المتاحة له داخل main-content-section */
+      max-width: none;
+      box-sizing: border-box; /* هام جداً للحفاظ على الحجم الكلي مع البادينغ */
   }
   .form-container input[type="text"],
   .form-container input[type="email"],
   .form-container textarea {
-      width: calc(100% - 20px); /* ضبط العرض ليتناسب مع البادينغ الجديد */
-      padding: 0.6rem; /* تقليل البادينغ للحقول */
-      margin-bottom: 1rem; /* تقليل الهامش السفلي بين الحقول */
-      margin-left: auto; /* توسيط الحقول */
-      margin-right: auto; /* توسيط الحقول */
-      display: block; /* لجعلها block وتأخذ العرض الكامل المتاح لها */
+      width: calc(100% - 20px); /* ضبط العرض لترك 10px بادينغ داخلي من كل جانب */
+      padding: 0.6rem 10px; /* بادينغ رأسي 0.6rem، أفقي 10px */
+      margin-bottom: 1rem;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      box-sizing: border-box; /* التأكد من أن box-sizing مطبق هنا أيضاً */
   }
   .form-container label {
-      font-size: 1rem; /* تصغير حجم الخط للتسميات */
+      font-size: 1rem;
   }
   .btn-primary-custom {
-      padding: 0.6rem 1.2rem; /* ضبط حجم الزر */
-      font-size: 1rem; /* تصغير حجم خط الزر */
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      width: calc(100% - 20px); /* اجعل الزر بنفس عرض الحقول ليتناسق */
+      margin: 0.5rem auto;
+      display: block;
   }
 }
 
@@ -564,6 +575,7 @@ body::before {
   margin: 1rem auto;
   color: #fff;
   text-align: center;
+  box-sizing: border-box; /* التأكد من أن box-sizing مضبوط هنا */
 }
 .form-container label {
   display: block;
@@ -587,6 +599,7 @@ body::before {
   transition: all 0.3s ease;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   text-align: right;
+  box-sizing: border-box; /* التأكد من أن box-sizing مضبوط هنا */
 }
 .form-container input:focus,
 .form-container textarea:focus {
