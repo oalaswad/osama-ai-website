@@ -20,13 +20,14 @@ exports.handler = async function (event) {
     };
   }
 
-  const MODEL = "llama3-70b-8192";
-  const isArabic = /[\u0600-\u06FF]/.test(message);
+  const MODEL = "llama3-70b-8192"; //
+  const isArabic = /[\u0600-\u06FF]/.test(message); //
 
   const SYSTEM_PROMPT = isArabic
     ? `
 أنت "أسامة بوت"، مساعد نفسي وتقني ذكي.
 - رد دائمًا باللغة العربية الفصحى فقط.
+- **تجنب تماماً استخدام أي كلمات أو مصطلحات أجنبية (غير عربية) في ردك.**
 - لا تستخدم أي أسماء للمستخدم، ولا تبدأ ردك بكلمات مثل أهلاً أو مرحبًا أو أسماء.
 - ابدأ الرد مباشرة بالمحتوى المفيد.
 - اجعل الرد موجزًا في 4-6 جمل بحد أقصى.
@@ -45,20 +46,20 @@ You are "Osama Bot", a smart and empathetic assistant.
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": process.env.GROQ_API_KEY
+        "Authorization": process.env.GROQ_API_KEY //
       },
       body: JSON.stringify({
-        model: MODEL,
+        model: MODEL, //
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: message }
+          { role: "system", content: SYSTEM_PROMPT }, //
+          { role: "user", content: message } //
         ]
       })
     });
 
-    const data = await response.json();
+    const data = await response.json(); //
 
-    if (data.error) {
+    if (data.error) { //
       return {
         statusCode: 200,
         body: JSON.stringify({
@@ -76,16 +77,39 @@ You are "Osama Bot", a smart and empathetic assistant.
         : "Sorry, I couldn't generate a response right now.");
 
     // ✅ إزالة أي أسماء أو تحيات في البداية
-    reply = reply.replace(/^(أهلاً|مرحبًا|Hi|Hello|Hey)[^:،]*[:،]?\s*/i, "").trim();
+    reply = reply.replace(/^(أهلاً|مرحبًا|Hi|Hello|Hey)[^:،]*[:،]?\s*/i, "").trim(); //
+
+    // ⭐ إضافة خطوة تنظيف إضافية للكلمات الإنجليزية الشائعة التي قد تظهر
+    if (isArabic) {
+        // يمكنك إضافة المزيد من الكلمات الشائعة هنا مع ترجمتها الصحيحة
+        const englishToArabicMap = {
+            "conditions": "الظروف",
+            "condition": "حالة",
+            "communication": "التواصل",
+            "komunikiraju": "يتواصلون", // هذه الكلمة غير إنجليزية بل سلافية، لكن يجب معالجتها
+            "heard": "سمع",
+            "sound": "صوت",
+            "webmd": "ويب إم دي", // مثال: إذا كان يظهر كـ WebMD
+            "api": "واجهة برمجة التطبيقات", // مثال: إذا كان يظهر كـ API
+            // أضف المزيد حسب الكلمات التي تلاحظ ظهورها
+        };
+
+        for (const [en, ar] of Object.entries(englishToArabicMap)) {
+            // استخدام تعبير نمطي لضمان استبدال الكلمة كاملة فقط
+            const regex = new RegExp(`\\b${en}\\b`, 'gi');
+            reply = reply.replace(regex, ar);
+        }
+    }
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({ reply })
+      statusCode: 200, //
+      body: JSON.stringify({ reply }) //
     };
 
-  } catch {
+  } catch (error) { //
+    console.error("Error in Groq handler:", error); //
     return {
-      statusCode: 500,
+      statusCode: 500, //
       body: JSON.stringify({
         reply: isArabic
           ? "حدث خطأ غير متوقع. حاول لاحقًا."
