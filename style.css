@@ -85,7 +85,7 @@ body::before {
 
 @keyframes aiActiveGlow {
     0% { filter: drop-shadow(0 0 50px #00d4ff88) drop-shadow(0 0 30px #3c9eff88); transform: scale(1); }
-    50% { filter: drop_shadow(0 0 90px #00d4ffdd) drop_shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
+    50% { filter: drop-shadow(0 0 90px #00d4ffdd) drop_shadow(0 0 60px #3c9effdd); transform: scale(1.05); }
     100% { filter: drop_shadow(0 0 50px #00d4ff88) drop_shadow(0 0 30px #3c9eff88); transform: scale(1); }
 }
 
@@ -224,7 +224,7 @@ body::before {
 .insta-card svg {
   width: 32px; height: 32px;
   margin: 0;
-  filter: drop_shadow(0 0 14px #fa94ff44);
+  filter: drop-shadow(0 0 14px #fa94ff44);
 }
 /* هذا هو العنصر الحاوي لـ "@0alaswad" و "تابعني!" */
 .insta-text-group {
@@ -438,7 +438,7 @@ body::before {
   min-width: 260px;
   width: 90vw;
   text-align: center;
-  padding: 1.5rem 1rem; /* تم توحيد البادينغ */
+  padding: 1.5rem 1rem;
   background: rgba(10, 25, 49, 0.64);
   backdrop-filter: blur(12px);
   border-radius: 32px;
@@ -449,7 +449,7 @@ body::before {
 .page-header h1 {
   margin: 0;
   color: #F0F5F9;
-  font-size: 2.25rem; /* حجم الخط الموحد للعناوين في الصفحات الداخلية */
+  font-size: 2.25rem;
   letter-spacing: 1px;
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
@@ -518,7 +518,7 @@ body::before {
   .main-content-section { padding: 1.5rem; margin: 1.5rem auto; }
 }
 @media (max-width: 480px) {
-  .page-header { /* تعديل الهامش لجوالات صغيرة جداً */
+  .page-header {
     margin: 10px auto 3vh auto;
   }
   .page-header h1 { font-size: 1.5rem; }
@@ -529,8 +529,9 @@ body::before {
 
   /* تنسيقات خاصة بصفحة التواصل (message.html) على الموبايل */
   .form-container {
-      padding: 1.5rem; /* تقليل البادينغ الداخلي للنموذج */
-      width: 95%; /* زيادة العرض ليملأ المساحة بشكل أفضل */
+      padding: 1rem; /* تقليل البادينغ الداخلي للنموذج */
+      width: 100%; /* زيادة العرض ليملأ المساحة بشكل أفضل */
+      max-width: none; /* إزالة الحد الأقصى للعرض للسماح بملء المساحة المتاحة */
   }
   .form-container input[type="text"],
   .form-container input[type="email"],
@@ -538,6 +539,9 @@ body::before {
       width: calc(100% - 20px); /* ضبط العرض ليتناسب مع البادينغ الجديد */
       padding: 0.6rem; /* تقليل البادينغ للحقول */
       margin-bottom: 1rem; /* تقليل الهامش السفلي بين الحقول */
+      margin-left: auto; /* توسيط الحقول */
+      margin-right: auto; /* توسيط الحقول */
+      display: block; /* لجعلها block وتأخذ العرض الكامل المتاح لها */
   }
   .form-container label {
       font-size: 1rem; /* تصغير حجم الخط للتسميات */
