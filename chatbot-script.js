@@ -173,6 +173,8 @@ document.addEventListener('touchmove', function() {
 let botResponses = {};
 // سجل المحادثة
 let chatHistory = [];
+// مؤشر الكتابة
+let typingIndicator = null;
 
 // دالة لجلب الردود من ملف JSON
 async function fetchBotResponses() {
@@ -212,13 +214,21 @@ function firstWelcomeMsgs() {
 function addBotMsg(msg, debugInfo = null) {
   const div = document.createElement('div');
   div.className = 'chatbot-bubble';
-  // معالجة الروابط وتضمين زر النسخ
-  div.innerHTML = formatMessage(msg); // استخدام دالة جديدة لتنسيق الرسالة
+  
+  // إضافة أيقونة البوت
+  const botAvatar = document.createElement('div');
+  botAvatar.className = 'avatar bot-avatar';
+  div.appendChild(botAvatar);
+
+  const messageContent = document.createElement('div');
+  messageContent.innerHTML = formatMessage(msg); // استخدام دالة لتنسيق الروابط
+  div.appendChild(messageContent);
+
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   chatHistory.push({ type: 'bot', text: msg });
   saveChatHistory(); // حفظ سجل المحادثة
-  addCopyButton(div, msg); // إضافة زر النسخ للرسائل النصية
+  addCopyButton(messageContent, msg); // إضافة زر النسخ للرسائل النصية
 
   if (debugEnabled && debugInfo && document.getElementById('debug-box')) {
     const box = document.getElementById('debug-box');
@@ -234,7 +244,16 @@ function addBotMsg(msg, debugInfo = null) {
 function addUserMsg(msg) {
   const div = document.createElement('div');
   div.className = 'chatbot-bubble user';
-  div.textContent = msg;
+
+  const messageContent = document.createElement('div');
+  messageContent.textContent = msg;
+  div.appendChild(messageContent);
+
+  // إضافة أيقونة المستخدم
+  const userAvatar = document.createElement('div');
+  userAvatar.className = 'avatar user-avatar';
+  div.appendChild(userAvatar);
+
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   chatHistory.push({ type: 'user', text: msg });
@@ -248,7 +267,7 @@ function formatMessage(message) {
 }
 
 // دالة لإضافة زر النسخ
-function addCopyButton(messageDiv, textToCopy) {
+function addCopyButton(messageContentDiv, textToCopy) {
     const copyBtn = document.createElement('button');
     copyBtn.textContent = 'نسخ';
     copyBtn.style.cssText = `
@@ -274,7 +293,7 @@ function addCopyButton(messageDiv, textToCopy) {
             copyBtn.textContent = 'فشل النسخ';
         }
     };
-    messageDiv.appendChild(copyBtn);
+    messageContentDiv.appendChild(copyBtn);
 }
 
 
@@ -302,6 +321,43 @@ function loadChatHistory() {
     }
 }
 
+// إضافة تمرير تلقائي عند التركيز على حقل الإدخال
+userInput.addEventListener('focus', () => {
+    // تمرير إلى الأسفل بعد فترة قصيرة للسماح للوحة المفاتيح بالظهور
+    setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 300); // قد تحتاج لتعديل هذا التأخير
+});
+
+// دالة لعرض مؤشر الكتابة
+function showTypingIndicator() {
+    if (typingIndicator) return; // إذا كان المؤشر موجودًا بالفعل، لا تفعل شيئًا
+
+    typingIndicator = document.createElement('div');
+    typingIndicator.className = 'chatbot-bubble typing';
+
+    // إضافة أيقونة البوت
+    const botAvatar = document.createElement('div');
+    botAvatar.className = 'avatar bot-avatar';
+    typingIndicator.appendChild(botAvatar);
+
+    const typingDots = document.createElement('div');
+    typingDots.innerHTML = '<div><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+    typingIndicator.appendChild(typingDots);
+
+    chatMessages.appendChild(typingIndicator);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// دالة لإزالة مؤشر الكتابة
+function removeTypingIndicator() {
+    if (typingIndicator) {
+        typingIndicator.remove();
+        typingIndicator = null;
+    }
+}
+
+
 // الرد الذكي حسب الكلمات
 chatForm.onsubmit = async function(e) {
   e.preventDefault();
@@ -326,22 +382,18 @@ chatForm.onsubmit = async function(e) {
 
   addUserMsg(txt);
   userInput.value = '';
+  showTypingIndicator(); // عرض مؤشر الكتابة
 
   const lowerTxt = txt.toLowerCase();
 
   const found = await findLocalBotResponse(lowerTxt);
   if (found) {
+    removeTypingIndicator(); // إزالة مؤشر الكتابة
     const duration = (performance.now() - startTime) / 1000;
     addBotMsg(found, { source: '📁 قاعدة البيانات', time: duration, question: txt });
+    // يمكنك إضافة أزرار الرد السريع هنا بناءً على السياق إذا أردت
     return;
   }
-
-  // إضافة رسالة انتظار قبل استدعاء Groq API
-  const waitingMsgDiv = document.createElement('div');
-  waitingMsgDiv.className = 'chatbot-bubble bot-waiting';
-  waitingMsgDiv.textContent = 'لحظة من فضلك، أبحث عن أفضل رد...';
-  chatMessages.appendChild(waitingMsgDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
 
   try {
     const groqReply = await fetch("/.netlify/functions/groq-handler", {
@@ -354,16 +406,17 @@ chatForm.onsubmit = async function(e) {
       data = await groqReply.json();
     } catch (parseError) {
       console.error("خطأ في قراءة رد Groq:", parseError);
-      waitingMsgDiv.remove(); // إزالة رسالة الانتظار عند الخطأ
+      removeTypingIndicator(); // إزالة مؤشر الكتابة عند الخطأ
       addBotMsg("عذرًا، لم أفهم رد المساعد الذكي. حاول مرة أخرى.");
       return;
     }
-    waitingMsgDiv.remove(); // إزالة رسالة الانتظار عند تلقي الرد بنجاح
+    removeTypingIndicator(); // إزالة مؤشر الكتابة عند تلقي الرد بنجاح
     const duration = (performance.now() - startTime) / 1000;
     addBotMsg(data.reply || "لم أتمكن من فهم سؤالك من خلال الذكاء الاصطناعي الخارجي. هل يمكنك إعادة صياغته أو سؤالي عن موضوع آخر؟", { source: '🤖 Groq API', time: duration, question: txt });
+    // يمكنك إضافة أزرار الرد السريع هنا بناءً على السياق إذا أردت
   } catch (error) {
     console.error("Groq API error:", error);
-    waitingMsgDiv.remove(); // إزالة رسالة الانتظار عند الخطأ
+    removeTypingIndicator(); // إزالة مؤشر الكتابة عند الخطأ
     addBotMsg("حدث خطأ أثناء الاتصال بالمساعد الذكي. حاول لاحقاً.");
   }
 
@@ -374,6 +427,45 @@ chatForm.onsubmit = async function(e) {
     unrecognizedQuestionsInput.value += entry;
   }
 };
+
+// دالة لإضافة أزرار الرد السريع (مثال توضيحي، تحتاج إلى تخصيصها)
+function addQuickReplyButtons(buttons) {
+    const quickReplyContainer = document.querySelector('.quick-reply-buttons');
+    if (!quickReplyContainer) {
+        // إذا لم يكن هناك حاوية لأزرار الرد السريع، قم بإنشائها
+        const inputArea = document.querySelector('.chatbot-input-area');
+        const newContainer = document.createElement('div');
+        newContainer.className = 'quick-reply-buttons';
+        chatForm.insertBefore(newContainer, inputArea);
+    }
+    const container = document.querySelector('.quick-reply-buttons');
+    container.innerHTML = ''; // مسح الأزرار القديمة
+
+    buttons.forEach(buttonText => {
+        const btn = document.createElement('button');
+        btn.textContent = buttonText;
+        btn.onclick = () => {
+            userInput.value = buttonText;
+            chatForm.dispatchEvent(new Event('submit')); // إرسال النص كأن المستخدم كتبه
+            container.innerHTML = ''; // إزالة الأزرار بعد الاختيار
+        };
+        container.appendChild(btn);
+    });
+    chatMessages.scrollTop = chatMessages.scrollHeight; // التمرير للأسفل لرؤية الأزرار
+}
+
+// مثال على استخدام أزرار الرد السريع بعد رد معين
+// يمكنك استدعاء هذه الدالة بناءً على الرد الذي يأتي من Groq أو من الردود المحلية
+/*
+// بعد إضافة addBotMsg(data.reply ...) في chatForm.onsubmit
+// أضف:
+if (data.reply.includes("أفكار جديدة")) { // مثال: إذا كان الرد يتضمن كلمة "أفكار جديدة"
+    addQuickReplyButtons(["الذكاء الاصطناعي", "بناء المواقع", "علم النفس"]);
+} else if (data.reply.includes("مساعدة")) {
+    addQuickReplyButtons(["من أنت؟", "ماذا يفعل هذا الموقع؟"]);
+}
+*/
+
 
 async function findLocalBotResponse(lowerTxt) {
   const profaneWordsRegex = /\b(أحمق|غبي|أبله|سافل|فاشل|كاذب|احمق|تبا|لعنة|حمار|كلب|سخيف|قذر|وقح|مغفل|حقير|تخلف|غباء|حماقة|مزعج|سامج)\b/i;

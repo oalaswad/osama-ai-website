@@ -187,18 +187,113 @@
   box-shadow: 0 1px 8px #185adb22;
   animation: fadeInMsg 0.47s;
   margin-bottom: 3px;
+  display: flex; /* لتضمين الأيقونة والنص في نفس السطر */
+  align-items: flex-start; /* محاذاة العناصر للأعلى */
 }
+/* أيقونات المستخدم والبوت */
+.chatbot-bubble .avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 8px; /* مسافة بين الأيقونة والفقاعة */
+  flex-shrink: 0; /* منع الأيقونة من الانكماش */
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.chatbot-bubble.user .avatar {
+    margin-right: 0;
+    margin-left: 8px; /* مسافة لليسار لرسائل المستخدم */
+}
+.bot-avatar {
+    background-image: url('https://osama-ai.netlify.app/osama-bot.svg'); /* رابط صورة البوت الكرتوني */
+    background-color: #3c9eff;
+}
+.user-avatar {
+    background-image: url('https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png'); /* أيقونة مستخدم افتراضية */
+    background-color: #185adb;
+}
+/* لتوسيع المحتوى داخل الفقاعة ليشمل الأيقونة */
+.chatbot-bubble > div {
+    flex-grow: 1;
+}
+
 .chatbot-bubble.user {
   background: linear-gradient(90deg,#185adbcc 50%,#3c9eff 100%);
   align-self: flex-end;
   color: #fff;
   border-radius: 20px 9px 20px 22px;
   text-align: right;
+  flex-direction: row-reverse; /* لعرض الأيقونة على اليمين للمستخدم */
 }
 @keyframes fadeInMsg {
   from { opacity: 0; transform: translateY(9px);}
   to { opacity: 1; transform: translateY(0);}
 }
+/* مؤشر الكتابة */
+.chatbot-bubble.typing {
+    background: linear-gradient(120deg,#3c9eff22,#222831cc 78%);
+    align-self: flex-start;
+    padding: 10px 20px;
+    border-radius: 20px 22px 20px 9px;
+    color: #fff;
+    animation: fadeInMsg 0.47s;
+}
+
+.chatbot-bubble.typing .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: #00d4ff;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: blink 1.4s infinite;
+}
+
+.chatbot-bubble.typing .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.chatbot-bubble.typing .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0%, 75%, 100% { opacity: 0; }
+    25%, 50% { opacity: 1; }
+}
+
+/* أزرار الرد السريع */
+.quick-reply-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    justify-content: center;
+    flex-shrink: 0;
+    border-top: 1.5px solid #3c9eff22;
+    background: rgba(10,25,49,0.94);
+}
+
+.quick-reply-buttons button {
+    background: linear-gradient(135deg,#00d4ff,#185adb);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+    font-family: 'Tajawal','Cairo',sans-serif;
+}
+
+.quick-reply-buttons button:hover {
+    background: linear-gradient(135deg,#185adb,#00d4ff);
+    transform: translateY(-2px);
+}
+
+
 .chatbot-input-area {
   padding: 7px 10px 13px 10px;
   background: transparent;
@@ -207,7 +302,7 @@
   gap: 7px;
   flex-shrink: 0; /* منع منطقة الإدخال من الانكماش والتأكد من بقائها في الأسفل */
   /* إضافة خصائص التعامل مع safe-area-inset */
-  padding-bottom: calc(13px + env(keyboard-inset-bottom, 0px)); /* تجربة لتعويض الكيبورد */
+  padding-bottom: calc(13px + env(safe-area-inset-bottom, 0px)); /* استخدام safe-area-inset-bottom */
 }
 .chatbot-input-area input {
   flex: 1;
@@ -240,12 +335,11 @@
   .chatbot-box {
     width: 99vw;
     max-width: 99vw;
-    height: 95vh; /* تكبير الارتفاع لملء الشاشة على الجوال */
-    max-height: 95vh;
+    height: 90vh; /* تم التعديل من 95vh إلى 90vh */
+    max-height: 90vh; /* تم التعديل من 95vh إلى 90vh */
     border-radius: 0;
     resize: none; /* تعطيل إعادة التحجيم اليدوي على الأجهزة الصغيرة لكي تملأ الشاشة */
-    /* إضافة تعويض لمناطق الشاشة الآمنة */
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    /* تم إزالة padding-bottom: env(safe-area-inset-bottom, 0px); من هنا */
   }
   .chatbot-messages {
     min-height: unset;
